@@ -1,60 +1,73 @@
 import csv
 import time
-import math
-import operator
+from operator import itemgetter 									#lambda is slower in this case
 startTime = time.time()
 filename='Beijing_restaurants.txt'
-coordDict=[{0 : 51970}]							#about to make dictionary...this is the first default line
-
-
+coordList=[]						
 
 def findLimits():
+	
 	with open(filename, 'r', encoding='UTF-8') as df1:
+		
 		lineNum=0			
+		
 		try:
-			df1.__next__() 								#skipping the first line 
+			df1.__next__() 											#skipping the first line 
 		except StopIteration:
 			print('StopIteration')	
 		
-		maxX=0											#all greater than 0
-		maxY=0											#all greater than 0
-		minX=200										#around 40
-		minY=200										#around 116
+		maxX=0														#all greater than 0
+		maxY=0														#all greater than 0
+		minX=200													#around 40
+		minY=200													#around 116
 		
 		for row in df1:
+			
 			lineNum+=1
-			rawData=row.split(' ')						
-			fixedData= [float(i) for i in rawData]		#transform strings to floats		
+			fixedData=fixData(lineNum, row)
+			coordList.append(fixedData)
 			
-			addIdentifiers(lineNum, fixedData)			#identifier for every line 	
+			if fixedData[1]>maxX:
+				maxX=fixedData[1]
+			elif fixedData[1]<minX:
+				minX=fixedData[1]
+			if fixedData[2]>maxY:
+				maxY=fixedData[2]
+			elif fixedData[2]<minY:
+				minY=fixedData[2]
+	
+		return minX, maxX, minY, maxY 								#tuple
+
+def fixData(lineNum, line):
+
+	rawData=line.split(' ')	
+	#print(rawData)											#['39.865999', '116.26745\n']
 			
-			if fixedData[0]>maxX:
-				maxX=fixedData[0]
-			elif fixedData[0]<minX:
-				minX=fixedData[0]
-			if fixedData[1]>maxY:
-				maxY=fixedData[1]
-			elif fixedData[1]<minY:
-				minY=fixedData[1]
+	splitXY=[i.split(',') for i in rawData]	
+	#print(splitXY)											# [['39.865999'], ['116.26745\n']]		
+	floatData= [float(j) for i in splitXY for j in i]		#transform strings to floats	
+	#print(floatData)										#[39.865999, 116.26745]
+	floatData.insert(0,lineNum)								#insert identifiers in the beggining 
+	#print(floatData)										#[51959, 39.865999, 116.26745]
+	return floatData
+
 		
-		return minX, maxX, minY, maxY 
+def sortingX(lists):
 
+	return sorted(lists, key=itemgetter(1))
 
-def addIdentifiers(line, spot):
+def sortingY(lists):
 
-	coordDict.append({line : spot})
-
-def sorting(lis):
-
-	print(sorted(lis, key=lambda i: i.values()))
+	return sorted(lists, key=itemgetter(2))
 
 def makeGrid(bound):
-	temp=list()
+	
 	rangeX=(bound[1]-bound[0])/10
 	rangeY=(bound[3]-bound[2])/10
+	print('------')
 	print(rangeX)
 	print(rangeY)
-	
+	print('------')
 	
 
 
@@ -63,10 +76,12 @@ def makeGrid(bound):
 if __name__ == "__main__":
 
 	boundaries=findLimits()								#the results "boundaries" should be the first line in grid.dir
-	print(boundaries)
 	
-	print(coordDict) # 51900: [39.899093, 116.21044], 51901: [39.940503, 116.313144], 51902: [39.986791, 116.703016]
-	sorting(coordDict)
+	#print(coordList)									#e.g: [...[51951, 39.947793, 116.192175], [51952, 39.925906, 116.438004]...]
+	xSort=sortingX(coordList)
+	ySort=sortingY(coordList)
+	#print(xSort)
+	#print(ySort)
 	makeGrid(boundaries)
-	
+	print(boundaries)
 	print("--- %s seconds ---" % (time.time() - startTime))
