@@ -36,7 +36,7 @@ def findLimits():
 			elif fixedData[2]<minY:
 				minY=fixedData[2]
 	
-		return minX, maxX, minY, maxY 								#tuple
+		return [minX, maxX, minY, maxY] 						
 
 def fixData(lineNum, line):
 
@@ -51,35 +51,61 @@ def fixData(lineNum, line):
 	#print(floatData)										#[51959, 39.865999, 116.26745]
 	return floatData
 
+def theGrid(cList, boundaries):
+
+	dividedRangeX=(boundaries[1]-boundaries[0])/10
+	dividedRangeY=(boundaries[3]-boundaries[2])/10
+	#print(dividedRangeX)
+	#print(dividedRangeY)
+	cell=0
+	counter=0
+	belongsToCell=[]
+	firstTime=1
+	with open('grid.grd', 'w+', encoding='UTF-8') as dfgrid, open('grid.dir', 'w+', encoding='UTF-8') as dfdir: #write and reading
 		
-def sortingX(lists):
+		for x in range(10):
+			for y in range(10):
+				for sublist in cList:
+					#sublist[1]=xcoordinate sublist[2]=ycoordinate
+					if sublist[1]>=boundaries[0] and sublist[1]<boundaries[0]+((x+1)*dividedRangeX) and sublist[2]>=boundaries[2] and sublist[2]<boundaries[2]+((y+1)*dividedRangeY):
+						belongsToCell.insert(len(belongsToCell), sublist)
+						counter+=1
+						if firstTime==1:
+							firstRestaurant=[x,y, sublist[0]]
+							firstTime=0
+				
+				#sorted(belongsToCell, key=itemgetter(0)) 						#sort the cell by its identifier
+				
+				print(belongsToCell) #[51791, 39.745316, 116.152629], [51800, 39.730122, 116.11868], [51821, 39.779803, 116.178883]
+				cell+=1
+				print('---------------------------------next cell %d ----------------------------------------------' % cell)
+				'''
+				#write grid.grd
+				for i in belongsToCell:
+					dfgrid.write(i)
+				'''
+				firstRestaurant.insert(3, counter)
+				print(firstRestaurant)
+				'''
+				#write grid.dir
+				dfdir.write(firstRestaurant)
+				'''
+				counter=0														#because we are moving to the next cell
+				firstTime=1														#because we are moving to the next cell 
+				break			
+			break
 
-	return sorted(lists, key=itemgetter(1))
-
-def sortingY(lists):
-
-	return sorted(lists, key=itemgetter(2))
-
-def makeGrid(bound):
-	
-	rangeX=(bound[1]-bound[0])/10
-	rangeY=(bound[3]-bound[2])/10
-	print('------')
-	print(rangeX)
-	print(rangeY)
-	print('------')
-	
 
 
 if __name__ == "__main__":
 
-	boundaries=findLimits()								#the results "boundaries" should be the first line in grid.dir
+	boundaries=findLimits()									#the results "boundaries" should be the first line in grid.dir
+	#print(boundaries)
+	#print(coordList)											#e.g: [...[51951, 39.947793, 116.192175], [51952, 39.925906, 116.438004]...]
+	#xSortedCoordList=sorted(coordList, key=itemgetter(1))
+	#ySortedCoordList=sorted(coordList, key=itemgetter(2)) 		#to benefit when we will make the linearly scan for the grid creation
+	#print(xSortedCoordList)									#e.g: [...[37616, 40.179829, 116.164818], [27786, 40.179911, 116.40583]]
+	#print(ySortedCoordList)									#e.g: [...[1140, 40.082111, 116.719937], [48288, 39.95366, 116.719976]]
 	
-	#print(coordList)									#e.g: [...[51951, 39.947793, 116.192175], [51952, 39.925906, 116.438004]...]
-	xSort=sortingX(coordList)
-	ySort=sortingY(coordList)
-	#print(xSort)										#e.g: [...[37616, 40.179829, 116.164818], [27786, 40.179911, 116.40583]]
-	#print(ySort)										#e.g: [...[1140, 40.082111, 116.719937], [48288, 39.95366, 116.719976]]
-	makeGrid(boundaries)
-	print(boundaries)
+	theGrid(coordList, boundaries)
 	print("--- %s seconds ---" % (time.time() - startTime))
