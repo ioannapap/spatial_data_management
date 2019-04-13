@@ -71,8 +71,6 @@ def makeGrid(bound):
 	
 
 
-
-
 if __name__ == "__main__":
 
 	boundaries=findLimits()								#the results "boundaries" should be the first line in grid.dir
@@ -80,8 +78,8 @@ if __name__ == "__main__":
 	#print(coordList)									#e.g: [...[51951, 39.947793, 116.192175], [51952, 39.925906, 116.438004]...]
 	xSort=sortingX(coordList)
 	ySort=sortingY(coordList)
-	#print(xSort)
-	#print(ySort)
+	#print(xSort)										#e.g: [...[37616, 40.179829, 116.164818], [27786, 40.179911, 116.40583]]
+	#print(ySort)										#e.g: [...[1140, 40.082111, 116.719937], [48288, 39.95366, 116.719976]]
 	makeGrid(boundaries)
 	print(boundaries)
 	print("--- %s seconds ---" % (time.time() - startTime))
