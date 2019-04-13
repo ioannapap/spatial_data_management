@@ -1,4 +1,3 @@
-import csv
 import time
 from operator import itemgetter 									#lambda is slower in this case
 startTime = time.time()
