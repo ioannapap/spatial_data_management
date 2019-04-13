@@ -82,11 +82,9 @@ def theGrid(cList, boundaries):
 				dfgrd.writelines('%s %s %s \n' % (str(i[0]), str(i[1]), str(i[2]))  for i in belongsToCell)
 				
 				firstRestaurant.insert(len(firstRestaurant), counter)
-				print(firstRestaurant)	
 				counter=0														#because we are moving to the next cell
 				firstTime=1														#because we are moving to the next cell 
-				
-				#dfdir.write(str(firstRestaurant))
+				dfdir.write('%s %s %s %s \n' % ( str(firstRestaurant[0]), str(firstRestaurant[1]), str(firstRestaurant[2]), str(firstRestaurant[3])))
 
 if __name__ == "__main__":
 
