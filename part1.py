@@ -61,7 +61,7 @@ def theGrid(cList, boundaries):
 	counter=0
 	firstTime=1
 	belongsToCell=[]
-	with open('grid.grd', 'w+', encoding='UTF-8') as dfgrid, open('grid.dir', 'w+', encoding='UTF-8') as dfdir: #write and reading
+	with open('grid.grd', 'w+', encoding='UTF-8') as dfgrd, open('grid.dir', 'w+', encoding='UTF-8') as dfdir: #write and reading
 		
 		for x in range(10):
 			for y in range(10):
@@ -79,27 +79,14 @@ def theGrid(cList, boundaries):
 				cell+=1
 				print('---------------------------------cell %d ----------------------------------------------' % cell)	
 				#print(belongsToCell) #[[56, 39.72927, 116.119278], [573, 39.729398, 116.128704], [1253, 39.723127, 116.121828], [1372, 39.729585, 116.127883], [1395, 39.729571, 116.128738]...
+				dfgrd.writelines('%s %s %s \n' % (str(i[0]), str(i[1]), str(i[2]))  for i in belongsToCell)
 				
-				
-				'''
-				#write grid.grd
-				for i in belongsToCell:
-					dfgrid.write(i)
-				'''
 				firstRestaurant.insert(len(firstRestaurant), counter)
 				print(firstRestaurant)	
 				counter=0														#because we are moving to the next cell
 				firstTime=1														#because we are moving to the next cell 
-				'''
-				#write grid.dir
-				dfdir.write(firstRestaurant)
-				'''
-		
-
 				
-			
-
-
+				#dfdir.write(str(firstRestaurant))
 
 if __name__ == "__main__":
 
