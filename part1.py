@@ -63,13 +63,20 @@ def theGrid(cList, boundaries):
 	placeInGrd=0
 	
 	with open('grid.grd', 'w+', encoding='UTF-8') as dfgrd, open('grid.dir', 'w+', encoding='UTF-8') as dfdir: #write and reading
+		
 		dfdir.write('%s %s %s %s\n' % ('{0:.6f}'.format(boundaries[0]), '{0:.6f}'.format(boundaries[1]), '{0:.6f}'.format(boundaries[2]), '{0:.6f}'.format(boundaries[3])))
+		
 		for x in range(10):
 			for y in range(10):
-				
+				print('cell (%d ,%d)' % (x,y))
+				print('lowerx boundary: %f' % (boundaries[0]+(x*dividedRangeX)))
+				print('maxx boundary: %f' % (boundaries[0]+((x+1)*dividedRangeX)))
+				print('lowery boundary: %f' % (boundaries[2]+(y*dividedRangeY)))
+				print('maxy boundary: %f' % (boundaries[2]+((y+1)*dividedRangeY)))
 				for sublist in cList:
+
 					#sublist[1]=xcoordinate sublist[2]=ycoordinate
-					if sublist[1]>=boundaries[0]+(x*dividedRangeX) and sublist[1]<boundaries[0]+((x+1)*dividedRangeX) and sublist[2]>=boundaries[2]+(y*dividedRangeY) and sublist[2]<boundaries[2]+((y+1)*dividedRangeY): #< 'cause if it was <= it wouldnt be written to the next cell'
+					if ((sublist[1]>=boundaries[0]+(x*dividedRangeX) and sublist[1]<boundaries[0]+((x+1)*dividedRangeX)) or (x==9 and sublist[1]==boundaries[1])) and ((sublist[2]>=boundaries[2]+(y*dividedRangeY) and sublist[2]<boundaries[2]+((y+1)*dividedRangeY)) or (y==9 and sublist[2]==boundaries[3])): #< 'cause if it was <= it wouldnt be written to the next cell'
 						
 						cellWithElements=1
 						numOfRestaurants+=1	
@@ -78,10 +85,9 @@ def theGrid(cList, boundaries):
 
 						if firstTimeInCell==1:
 							firstRestaurant=[x,y,placeInGrd]					
-							firstTimeInCell=0		
+							firstTimeInCell=0			
 						placeInGrd+=len(str(sublist))-2
-							
-				
+													
 				#print(belongsToCell) #[[56, 39.72927, 116.119278], [573, 39.729398, 116.128704], [1253, 39.723127, 116.121828], [1372, 39.729585, 116.127883], [1395, 39.729571, 116.128738]...
 				
 				dfgrd.writelines('%s %s %s \n' % (str(i[0]), '{0:.6f}'.format(i[1]), '{0:.6f}'.format(i[2]))  for i in belongsToCell)
