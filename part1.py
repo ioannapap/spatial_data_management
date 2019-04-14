@@ -57,40 +57,46 @@ def theGrid(cList, boundaries):
 	#print(dividedRangeX) == 0.04998209999999972
 	#print(dividedRangeY) == 0.06495100000000065
 	cellWithElements=0
-	numOfRest=0
-	lineInGrd=0
-	firstTime=1
+	firstTimeInCell=1
 	belongsToCell=[]
+	numOfRestaurants=0
+	placeInGrd=0
+	
 	with open('grid.grd', 'w+', encoding='UTF-8') as dfgrd, open('grid.dir', 'w+', encoding='UTF-8') as dfdir: #write and reading
-		
+		dfdir.write('%s %s %s %s\n' % ('{0:.6f}'.format(boundaries[0]), '{0:.6f}'.format(boundaries[1]), '{0:.6f}'.format(boundaries[2]), '{0:.6f}'.format(boundaries[3])))
 		for x in range(10):
 			for y in range(10):
 				
 				for sublist in cList:
 					#sublist[1]=xcoordinate sublist[2]=ycoordinate
 					if sublist[1]>=boundaries[0]+(x*dividedRangeX) and sublist[1]<boundaries[0]+((x+1)*dividedRangeX) and sublist[2]>=boundaries[2]+(y*dividedRangeY) and sublist[2]<boundaries[2]+((y+1)*dividedRangeY): #< 'cause if it was <= it wouldnt be written to the next cell'
+						
 						cellWithElements=1
+						numOfRestaurants+=1	
+						
 						belongsToCell.insert(len(belongsToCell), sublist)
-						if firstTime==1:
-							firstRestaurant=[x,y, lineInGrd]					
-							firstTime=0
-						lineInGrd+=1
-						numOfRest+=1	
+
+						if firstTimeInCell==1:
+							firstRestaurant=[x,y,placeInGrd]					
+							firstTimeInCell=0		
+						placeInGrd+=len(str(sublist))-2
+							
 				
 				#print(belongsToCell) #[[56, 39.72927, 116.119278], [573, 39.729398, 116.128704], [1253, 39.723127, 116.121828], [1372, 39.729585, 116.127883], [1395, 39.729571, 116.128738]...
 				
-				dfgrd.writelines('%s %s %s \n' % (str(i[0]), str(i[1]), str(i[2]))  for i in belongsToCell)
+				dfgrd.writelines('%s %s %s \n' % (str(i[0]), '{0:.6f}'.format(i[1]), '{0:.6f}'.format(i[2]))  for i in belongsToCell)
 				if cellWithElements==1:
-					firstRestaurant.insert(len(firstRestaurant), numOfRest)
-					dfdir.write('%s %s %s %s \n' % ( str(firstRestaurant[0]), str(firstRestaurant[1]), str(firstRestaurant[2]), str(firstRestaurant[3])))
-				numOfRest=0														#because we are moving to the next cell
-				firstTime=1														#because we are moving to the next cell 
+					firstRestaurant.insert(len(firstRestaurant), numOfRestaurants)
+					dfdir.write('%s %s %s %s\n' % (str(firstRestaurant[0]), str(firstRestaurant[1]), str(firstRestaurant[2]), str(firstRestaurant[3])))
+				belongsToCell=[]
+				numOfRestaurants=0														#because we are moving to the next cell
+				firstTimeInCell=1														#because we are moving to the next cell 
 				cellWithElements=0
+
 
 if __name__ == "__main__":
 
 	boundaries=findLimits()									#the results "boundaries" should be the first line in grid.dir
-	#print(boundaries)
 	#print(coordList)											#e.g: [...[51951, 39.947793, 116.192175], [51952, 39.925906, 116.438004]...]
 	#print(xSortedCoordList)									#e.g: [...[37616, 40.179829, 116.164818], [27786, 40.179911, 116.40583]]
 	#print(ySortedCoordList)									#e.g: [...[1140, 40.082111, 116.719937], [48288, 39.95366, 116.719976]]
