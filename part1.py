@@ -56,8 +56,9 @@ def theGrid(cList, boundaries):
 	dividedRangeY=(boundaries[3]-boundaries[2])/10
 	#print(dividedRangeX) == 0.04998209999999972
 	#print(dividedRangeY) == 0.06495100000000065
-	cell=0
-	counter=0
+	cellWithElements=0
+	numOfRest=0
+	lineInGrd=0
 	firstTime=1
 	belongsToCell=[]
 	with open('grid.grd', 'w+', encoding='UTF-8') as dfgrd, open('grid.dir', 'w+', encoding='UTF-8') as dfdir: #write and reading
@@ -68,22 +69,23 @@ def theGrid(cList, boundaries):
 				for sublist in cList:
 					#sublist[1]=xcoordinate sublist[2]=ycoordinate
 					if sublist[1]>=boundaries[0]+(x*dividedRangeX) and sublist[1]<boundaries[0]+((x+1)*dividedRangeX) and sublist[2]>=boundaries[2]+(y*dividedRangeY) and sublist[2]<boundaries[2]+((y+1)*dividedRangeY): #< 'cause if it was <= it wouldnt be written to the next cell'
+						cellWithElements=1
 						belongsToCell.insert(len(belongsToCell), sublist)
-						counter+=1
 						if firstTime==1:
-							firstRestaurant=[x,y, sublist[0]]					#sublist[0]= identifier
+							firstRestaurant=[x,y, lineInGrd]					
 							firstTime=0
-							
+						lineInGrd+=1
+						numOfRest+=1	
 				
-				cell+=1
-				print('---------------------------------cell %d ----------------------------------------------' % cell)	
 				#print(belongsToCell) #[[56, 39.72927, 116.119278], [573, 39.729398, 116.128704], [1253, 39.723127, 116.121828], [1372, 39.729585, 116.127883], [1395, 39.729571, 116.128738]...
-				dfgrd.writelines('%s %s %s \n' % (str(i[0]), str(i[1]), str(i[2]))  for i in belongsToCell)
 				
-				firstRestaurant.insert(len(firstRestaurant), counter)
-				counter=0														#because we are moving to the next cell
+				dfgrd.writelines('%s %s %s \n' % (str(i[0]), str(i[1]), str(i[2]))  for i in belongsToCell)
+				if cellWithElements==1:
+					firstRestaurant.insert(len(firstRestaurant), numOfRest)
+					dfdir.write('%s %s %s %s \n' % ( str(firstRestaurant[0]), str(firstRestaurant[1]), str(firstRestaurant[2]), str(firstRestaurant[3])))
+				numOfRest=0														#because we are moving to the next cell
 				firstTime=1														#because we are moving to the next cell 
-				dfdir.write('%s %s %s %s \n' % ( str(firstRestaurant[0]), str(firstRestaurant[1]), str(firstRestaurant[2]), str(firstRestaurant[3])))
+				cellWithElements=0
 
 if __name__ == "__main__":
 
