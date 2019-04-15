@@ -85,8 +85,10 @@ def theGrid(cList, boundaries):
 
 						if firstTimeInCell==1:
 							firstRestaurant=[x,y,placeInGrd]					
-							firstTimeInCell=0			
-						placeInGrd+=len(str(sublist))-2
+							firstTimeInCell=0	
+						with6decx='{0:.6f}'.format(sublist[1])
+						with6decy='{0:.6f}'.format(sublist[2])	
+						placeInGrd+=len(str(sublist[0]))+len(with6decx)+len(with6decy)+3 #two spaces and one \n
 													
 				#print(belongsToCell) #[[56, 39.72927, 116.119278], [573, 39.729398, 116.128704], [1253, 39.723127, 116.121828], [1372, 39.729585, 116.127883], [1395, 39.729571, 116.128738]...
 				
