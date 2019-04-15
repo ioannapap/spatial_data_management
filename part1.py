@@ -51,8 +51,8 @@ def theGrid(cList, boundaries):
 	cellWithElements=0
 	firstTimeInCell=1
 	belongsToCell=[]
-	numOfRestaurants=0
 	placeInGrd=0
+	numOfRestaurants=0
 	
 	with open('grid.grd', 'w+', encoding='UTF-8') as dfgrd, open('grid.dir', 'w+', encoding='UTF-8') as dfdir:
 		
