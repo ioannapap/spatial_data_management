@@ -1,10 +1,7 @@
 #from operator import itemgetter 									
-filename='Beijing_restaurants.txt'
-coordList=[]						
-
 def findLimits():
 	
-	with open(filename, 'r', encoding='UTF-8') as df1:
+	with open('Beijing_restaurants.txt', 'r', encoding='UTF-8') as df1:
 		
 		lineNum=0			
 		maxX=0														
@@ -96,7 +93,8 @@ def theGrid(cList, boundaries):
 				firstTimeInCell=1														
 				cellWithElements=0
 
-if __name__ == "__main__":
-
+if __name__ == '__main__':
+	
+	coordList=[]	
 	boundaries=findLimits()									
 	theGrid(coordList, boundaries)
