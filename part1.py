@@ -15,7 +15,8 @@ def findLimits():
 		try:
 			df1.__next__() 											
 		except StopIteration:
-			print('StopIteration')											
+			print('StopIteration')
+			sys.exit(1)											
 
 		for row in df1:
 			
