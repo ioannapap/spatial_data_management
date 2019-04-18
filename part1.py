@@ -59,12 +59,12 @@ def theGrid(cList, boundaries):
 		for x in range(10):
 			for y in range(10):
 
-				print('cell (%d ,%d)' % (x,y))
-				print('lowerx boundary: %f' % (boundaries[0]+(x*dividedRangeX)))
-				print('maxx boundary: %f' % (boundaries[0]+((x+1)*dividedRangeX)))
-				print('lowery boundary: %f' % (boundaries[2]+(y*dividedRangeY)))
-				print('maxy boundary: %f' % (boundaries[2]+((y+1)*dividedRangeY)))
-				
+				#print('cell (%d ,%d)' % (x,y))
+				#print('lowerx boundary: %f' % (boundaries[0]+(x*dividedRangeX)))
+				#print('maxx boundary: %f' % (boundaries[0]+((x+1)*dividedRangeX)))
+				#print('lowery boundary: %f' % (boundaries[2]+(y*dividedRangeY)))
+				#print('maxy boundary: %f' % (boundaries[2]+((y+1)*dividedRangeY)))
+
 				for sublist in cList:
 
 					if ((sublist[1]>=boundaries[0]+(x*dividedRangeX) and sublist[1]<boundaries[0]+((x+1)*dividedRangeX)) or (x==9 and sublist[1]==boundaries[1])) and ((sublist[2]>=boundaries[2]+(y*dividedRangeY) and sublist[2]<boundaries[2]+((y+1)*dividedRangeY)) or (y==9 and sublist[2]==boundaries[3])):
@@ -81,8 +81,8 @@ def theGrid(cList, boundaries):
 						with6decx='{0:.6f}'.format(sublist[1])
 						with6decy='{0:.6f}'.format(sublist[2])	
 						placeInGrd+=len(str(sublist[0]))+len(with6decx)+len(with6decy)+3 #two spaces and one \n
-													
-				dfgrd.writelines('%s %s %s \n' % (str(i[0]), '{0:.6f}'.format(i[1]), '{0:.6f}'.format(i[2]))  for i in belongsToCell)
+												
+				dfgrd.writelines('%s %s %s\n' % (str(i[0]), '{0:.6f}'.format(i[1]), '{0:.6f}'.format(i[2]))  for i in belongsToCell)
 				
 				if cellWithElements==1:
 					firstRestaurant.insert(len(firstRestaurant), numOfRestaurants)
