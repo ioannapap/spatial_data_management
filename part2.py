@@ -63,7 +63,6 @@ def windowEvaluation(d,b):
 							dfgrd.seek(l[2])
 							
 							for row in dfgrd:
-								
 								if numspots<l[3]:
 									numspots+=1
 									row=row.split(' ')
@@ -77,13 +76,12 @@ def windowEvaluation(d,b):
 							dfgrd.seek(l[2])
 							
 							for row in dfgrd:
-								row=row.split(' ')
 								numspots+=1
-								if float(row[1])>=d[0] and float(row[1])<=d[1] and float(row[2])>=d[2] and float(row[2])<=d[3] and numspots<l[3]:
-									
+								row=row.split(' ')
+								if float(row[1])>=d[0] and float(row[1])<=d[1] and float(row[2])>=d[2] and float(row[2])<=d[3] and numspots<l[3]:	
 									print(row[0]+' '+row[1]+' '+row[2])
 									rp2.write('%s %s %s' % (row[0], row[1], row[2]))
-								if numspots>=l[3]:
+								elif numspots>=l[3]:
 									break
 
 				break
