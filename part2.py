@@ -10,6 +10,7 @@ def checkDimensions(d, b):
 	else:	
 		return 0
 
+
 def dirData():
 
 	firstRow=1
@@ -25,6 +26,7 @@ def dirData():
 				dirList.insert(len(dirList), intRow)
 	
 	return boundaries
+
 
 def windowEvaluation(d,b):							
 	
@@ -63,8 +65,8 @@ def windowEvaluation(d,b):
 							dfgrd.seek(l[2])
 							
 							for row in dfgrd:
-								if numspots<l[3]:
-									numspots+=1
+								numspots+=1
+								if numspots<=l[3]:			
 									row=row.split(' ')
 									print(row[0]+' '+row[1]+' '+row[2])	
 									rp2.write('%s %s %s' % (row[0], row[1], row[2]))
@@ -78,10 +80,10 @@ def windowEvaluation(d,b):
 							for row in dfgrd:
 								numspots+=1
 								row=row.split(' ')
-								if float(row[1])>=d[0] and float(row[1])<=d[1] and float(row[2])>=d[2] and float(row[2])<=d[3] and numspots<l[3]:	
+								if float(row[1])>=d[0] and float(row[1])<=d[1] and float(row[2])>=d[2] and float(row[2])<=d[3] and numspots<=l[3]:	
 									print(row[0]+' '+row[1]+' '+row[2])
 									rp2.write('%s %s %s' % (row[0], row[1], row[2]))
-								elif numspots>=l[3]:
+								elif numspots>l[3]:
 									break
 
 				break
@@ -103,6 +105,7 @@ def getWindow(b):
 			checked=0	
 	
 	return dimensions
+
 
 if __name__ == '__main__':
 
