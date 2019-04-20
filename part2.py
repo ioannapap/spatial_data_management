@@ -66,8 +66,8 @@ def windowEvaluation(d,b):
 							
 							for row in dfgrd:
 								numspots+=1
+								row=row.split(' ')
 								if numspots<=l[3]:			
-									row=row.split(' ')
 									print(row[0]+' '+row[1]+' '+row[2])	
 									rp2.write('%s %s %s' % (row[0], row[1], row[2]))
 								else:
