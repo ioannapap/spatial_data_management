@@ -14,7 +14,6 @@ def checkArgs(inpt,b):
 		return 0
 
 
-
 def dirData():
 
 	firstRow=1
@@ -30,7 +29,6 @@ def dirData():
 				dirList.insert(len(dirList), intRow)
 	
 	return boundaries
-
 
 
 
@@ -155,12 +153,7 @@ def mindist(q, b, cell):
 				if md>minCellDist:
 					md=minCellDist
 					mdCell=[x,y]
-	'''
-	for i in allNCells:
-		if mdCell==i:
-			allNCells.pop(len(i)+1)		
-	'''	
-	print(cellList)
+	
 	cellList=sorted(cellList, key=itemgetter(2))
 	print('the Nearest Cell from q: ', mdCell)
 	print('the nearest distance is: ', md)
