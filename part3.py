@@ -65,7 +65,7 @@ def knnGenerator(q, nextNCell):
 				break
 		for i in allNCells:
 			if i in priorityQueue:
-				allNCells.pop(len(i))
+				allNCells.pop(len(i)+1)
 		priorityQueue.insert(len(priorityQueue), allNCells)
 
 '''
@@ -123,13 +123,11 @@ def mindist(q, b, cell):
 				if md>minCellDist:
 					md=minCellDist
 					mdCell=[x,y]
-	'''
+	
 	for i in allNCells:
 		if mdCell==i:
-			allNCells.pop(len(i))			
-	'''
-	print(md)
-	print(mdCell)
+			allNCells.pop(len(i)+1)			
+	print('the Nearest Cell from q: ', mdCell)
 	return mdCell
 
 
@@ -188,17 +186,20 @@ if __name__ == '__main__':
 	
 	bounds=dirData() 
 	arguments=getKq(bounds)
+	
 	k=int(arguments[0])
 	q=[float(arguments[1]), float(arguments[2])]
 	cell=findqCell(q, bounds)
+
+	print('q Cell: (%d, %d)' % (cell[0], cell[1]))
+	print('Given coordinates: (%f, %f)' % (q[0], q[1]))
+
 	allNCells=nearestCells(cell)
+	print('All nearest cells from q:', allNCells)
 	nextNCell=cell
 	mindist(q, bounds, nextNCell)
-	print(k)
-	print(q)
-	print(cell)
 	print(allNCells)
-	'''
+	
 	
 	with open('results_part3.txt', 'w', encoding='UTF-8') as rp3: 
 		for i in range(k):
@@ -208,4 +209,3 @@ if __name__ == '__main__':
 			#rp3.write('%s %s' % ('{0:.6f}'.format(nn[0]), '{0:.6f}'.format(nn[0])))
 			nextNCell=mindist(q,bounds,nextNCell)
 	
-	'''
