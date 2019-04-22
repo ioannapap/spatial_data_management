@@ -58,54 +58,79 @@ def orderedNSpots(q, cell):
 					numspots+=1
 					row=row.split(' ')
 					if numspots<=l[3]:
-						spotList.insert(len(spotList), [float(row[1]), float(row[2]), math.sqrt((float(row[1])-q[0])**2+(float(row[2])-q[1])**2)])
+						euclideanDist=math.sqrt((float(row[1])-q[0])**2+(float(row[2])-q[1])**2)
+						spotList.insert(len(spotList), [float(row[1]), float(row[2]), euclideanDist] )
 				break
-	print('unsorted spotList:\n', spotList) 
 	spotList=sorted(spotList, key=itemgetter(2))	#from smallest distance to biggest
-	print('sorted spotList:\n', spotList)
+	print('sorted spotList:\n', spotList[:10])
+	#e.g [[39.986881, 116.700676, 0.004297014894087245], [39.986791, 116.703016, 0.004354438769812758]
 	return spotList
 		
-'''
-def knnGenerator(q, nextNCell, allNCells):
 
-	nc=nextNCell[0] #the nearest cell i have right now
-	ncdistance=nextNCell[1]
+def knnGenerator(q, cell, ordCells, firstTime):
+
+	if firstTime==1:
+		firstTime=0
+		nc=cell 					
+		ncdistance=0
+		priorityQueue.insert(len(priorityQueue), nc)
+	else:
+		nearestCell=ordCells[0]
+		nc=[nearestCell[0], nearestCell[1]]
+		ncdistance=nearestCell[2]
+		print('priorityQueue:@@@ \n', priorityQueue[:10])
 	
-	priorityQueue.insert(len(priorityQueue), nc)
-	allVisitedCells.insert(len(allVisitedCells), nc)
-	
-	print('priorityQueue: ', priorityQueue)
-	
+
 	for elements in priorityQueue[0]:
-		
-		if elements[0]>=0 and elements[0]<=9: 	#found a cell
+		if elements>=0 and elements<=9: 	#checking the first element -if true found a cell
+			
+			allVisitedCells.insert(len(allVisitedCells),  nc)
 			
 			priorityQueue.pop(0) 				#remove from priorityQueue the cell
 			ordSpots=orderedNSpots(q, nc)
+			nearestCell=ordCells[0]
+			nc=[nearestCell[0], nearestCell[1]]
+			ncdistance=nearestCell[2]
 			place=0
-
 			for spot in ordSpots:
 				nsdistance=spot[2]
 				if nsdistance<=ncdistance:			
 					priorityQueue.insert(place, [spot[0], spot[1]])
 					place+=1
 				else:
-					priorityQueue.insert(place, nc)
-					place+=1
-					priorityQueue.insert(place, [spot[0], spot[1]])
-					place+=1
-			
+					while nsdistance>ncdistance:
+						priorityQueue.insert(place, nc)
+						place+=1
+						ordCells.pop(0)
+						nearestCell=ordCells[0]
+						nc=[nearestCell[0], nearestCell[1]]
+						ncdistance=nearestCell[2]
+						if nsdistance<=ncdistance:
+							priorityQueue.insert(place, [spot[0], spot[1]])
+							place+=1
+							#auto-break while
+				for cells in ordCells:
+					priorityQueue.insert(len(priorityQueue), [cells[0], cells[1]])
+			print('###############new priorityQueue:\n',priorityQueue[:10])	
+			break
 		else:									#found a spot
 
 			nearestNeighbor=priorityQueue[0]
 			priorityQueue.pop(0)
-			yield nearestNeighbor	
-'''
-
+			print('!!!!!!!!!!!!!!!!!!!nearest neigh:', nearestNeighbor)
+			return nearestNeighbor	
+			
+	for elements in priorityQueue[0]:
+		if elements>=10:
+			nearestNeighbor=priorityQueue[0]
+			priorityQueue.pop(0)
+			print('!!!!!!!!!!!!!!!!!!!nearest neigh:', nearestNeighbor)
+			return nearestNeighbor	
 
 
 
 def mindist(q, b, cell):
+	
 	cellList=[]
 	md=100
 	c=[cell[0], cell[1]]
@@ -120,7 +145,7 @@ def mindist(q, b, cell):
 			dividedRangeY=(float(b[3])-float(b[2]))/10
 			c=[x,y]
 			
-			if c in allNCells:
+			if c in nearestCells(cell):
 
 				lowerXCellBound=float(b[0])+(x*dividedRangeX)
 				upperXCellBound=float(b[0])+((x+1)*dividedRangeX)
@@ -155,9 +180,8 @@ def mindist(q, b, cell):
 					mdCell=[x,y]
 	
 	cellList=sorted(cellList, key=itemgetter(2))
-	print('the Nearest Cell from q: ', mdCell)
-	print('the nearest distance is: ', md)
-	print(cellList)
+	print('Nearest Cell from q: ', mdCell)
+	print('Nearest Distance from Cell is: ', md)
 	return cellList
 	#[mdCell, md] was working
 
@@ -229,21 +253,18 @@ if __name__ == '__main__':
 	print('q Cell: (%d, %d)' % (cell[0], cell[1]))
 	#print('Given coordinates: (%f, %f)' % (q[0], q[1]))
 
-	allNCells=nearestCells(cell)
-	print('All nearest cells from q:', allNCells)
-	nextNCell=cell  						
+	nextNCell=cell  			#e.g [0,1]			
 	ordCells=mindist(q, bounds, nextNCell)
-	#print(allNCells)
+	print('ordered cells by distance from q: ', ordCells)
+	#e.g [4, 5, 0.010018399999999872], [3, 6, 0.0201720000000023], [4, 6, 0.02252283113998083],...]
 	
-	'''
 	with open('results_part3.txt', 'w', encoding='UTF-8') as rp3: 
+		firstTime=1
+		priorityQueue=[]
 		for i in range(k):
-			nn=knnGenerator(q, nextNCell, allNCells)
-			print('The %d- NN is: %f   %f' % (i, nn[0], nn[1]))
+			nn=knnGenerator(q, nextNCell, ordCells, firstTime)
+			
 			#rp3.write('%s %s' % ('{0:.6f}'.format(nn[0]), '{0:.6f}'.format(nn[0])))
 			
-			nextNCell=mindist(q, b, nextNCell)
 		#for i in allVisitedCells:
 		#	rp3.write(str(i))
-
-	'''
