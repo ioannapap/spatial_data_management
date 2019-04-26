@@ -40,6 +40,7 @@ def getkq(b):
 			checked=checkArgs(args,b)
 		except ValueError:
 			checked=0	
+	
 	return args
 
 
@@ -59,8 +60,7 @@ def orderedNSpots(q, cell):
 						euclideanDist=math.sqrt((float(row[1])-q[0])**2+(float(row[2])-q[1])**2)
 						spotList.insert(len(spotList), [float(row[1]), float(row[2]), euclideanDist] )
 
-	spotList=sorted(spotList, key=itemgetter(2))	#from smallest distance to biggest
-	return spotList
+	return sorted(spotList, key=itemgetter(2))	
 		
 
 def knnGenerator(q, b, cell):
