@@ -132,7 +132,7 @@ def knnGenerator(q, b, cell):
 									break	
 							place+=1		
 							
-					elif nsdistance<=ncdistance:	
+					elif nsdistance<=ncdistance and spot not in priorityQueue:	
 						priorityQueue.insert(place, spot)
 						place+=1
 								
@@ -148,7 +148,7 @@ def knnGenerator(q, b, cell):
 							ncdistance=ncell[2]
 							ordCells.pop(0)	
 							
-						if nsdistance<=ncdistance: 
+						if nsdistance<=ncdistance and spot not in priorityQueue: 
 							priorityQueue.insert(place, spot)
 							place+=1
 				firstTime=0
@@ -194,11 +194,11 @@ def mindist(q, b, ordCells, cell):
 					
 				elif q[0]>lowerXCellBound and q[0]<upperXCellBound and q[1]>upperYCellBound:
 						
-					minCellDist=q[1]-lowerYCellBound
+					minCellDist=q[1]-upperYCellBound
 					
 				elif q[0]>upperXCellBound and q[1]<lowerYCellBound:
 					
-					minCellDist=math.sqrt((upperXCellBound-q[0])**2+(lowerYCellBound-q[1])**2)
+					minCellDist=math.sqrt((q[0]-upperXCellBound)**2+(lowerYCellBound-q[1])**2)
 				
 				elif q[0]<lowerXCellBound and q[1]<lowerYCellBound:
 					
@@ -206,18 +206,16 @@ def mindist(q, b, ordCells, cell):
 
 				elif q[0]>upperXCellBound and q[1]>upperYCellBound:
 
-					minCellDist=math.sqrt((upperXCellBound-q[0])**2+(upperYCellBound-q[1])**2)
+					minCellDist=math.sqrt((q[0]-upperXCellBound)**2+(q[1]-upperYCellBound)**2)
 
 				elif q[0]<lowerXCellBound and q[1]>upperYCellBound:
 
-					minCellDist=math.sqrt((lowerXCellBound-q[0])**2+(upperYCellBound-q[1])**2)
+					minCellDist=math.sqrt((lowerXCellBound-q[0])**2+(q[1]-upperYCellBound)**2)
 
 				if [x, y, minCellDist] not in priorityQueue  and [x, y, minCellDist] not in ordCells:
 					cellList.insert(len(cellList), [x, y, minCellDist])	
-	
-	cellList=sorted(cellList, key=itemgetter(2))
 
-	return cellList
+	return sorted(cellList, key=itemgetter(2))
 
 
 def findqCell(q, b):
@@ -383,7 +381,7 @@ if __name__ == '__main__':
 		i=0
 		for nn in knnGenerator(q, bounds, cell):
 			if i<k:
-				rp3.write('%s %s\n' % ('{0:.6f}'.format(nn[0]), '{0:.6f}'.format(nn[0])))
+				rp3.write('%s %s\n' % ('{0:.6f}'.format(nn[0]), '{0:.6f}'.format(nn[1])))
 				i+=1
 			else:
 				for i in allVisitedCells:
