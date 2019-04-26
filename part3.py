@@ -251,8 +251,6 @@ def nearestCells(c):
 			nCList.insert(len(nCList), [x+1, y+1])
 		if [x+1, y] not in nCList:
 			nCList.insert(len(nCList), [x+1, y])
-		
-		return nCList
 
 	elif x==0 and y>=1 and y<=8:
 		if [x, y+1] not in nCList:
@@ -266,8 +264,6 @@ def nearestCells(c):
 		if [x, y-1] not in nCList:
 			nCList.insert(len(nCList), [x, y-1])
 		
-		return nCList
-		
 	elif x==0 and y==9:
 		if [x+1, y] not in nCList:
 			nCList.insert(len(nCList), [x+1, y])
@@ -275,8 +271,6 @@ def nearestCells(c):
 			nCList.insert(len(nCList), [x+1, y-1])
 		if [x, y-1] not in nCList:
 			nCList.insert(len(nCList), [x, y-1])
-		
-		return nCList
 		
 	elif x==9 and y==0:
 		if [x+1, y] not in nCList:
@@ -286,9 +280,6 @@ def nearestCells(c):
 		if [x, y+1] not in nCList:
 			nCList.insert(len(nCList), [x, y+1]) 
 		
-		return nCList
-		
-
 	elif x>=1 and x<=8 and y==0:
 		if [x-1, y] not in nCList:
 			nCList.insert(len(nCList), [x-1, y])
@@ -299,10 +290,7 @@ def nearestCells(c):
 		if [x+1, y+1] not in nCList:
 			nCList.insert(len(nCList), [x+1, y+1])
 		if [x+1, y] not in nCList:
-			nCList.insert(len(nCList), [x+1, y])
-		
-		return nCList
-		
+			nCList.insert(len(nCList), [x+1, y])		
 
 	elif x==9 and y==9:
 		if [x-1, y] not in nCList:
@@ -311,9 +299,6 @@ def nearestCells(c):
 			nCList.insert(len(nCList), [x-1, y-1])
 		if [x, y-1] not in nCList:
 			nCList.insert(len(nCList), [x, y-1])
-		
-		return nCList
-	
 
 	elif x>=1 and x<=8 and y==9:
 		if [x-1, y] not in nCList:
@@ -326,8 +311,6 @@ def nearestCells(c):
 			nCList.insert(len(nCList), [x+1, y-1])
 		if [x+1, y] not in nCList:
 			nCList.insert(len(nCList), [x+1, y])
-		
-		return nCList
 
 	elif x==9 and y>=1 and y<=8:
 		if [x, y+1] not in nCList:
@@ -341,8 +324,6 @@ def nearestCells(c):
 		if [x, y-1] not in nCList:
 			nCList.insert(len(nCList), [x, y-1])
 		
-		return nCList
-	
 	else:
 		if [x-1, y+1] not in nCList:
 			nCList.insert(len(nCList), [x-1, y+1])
@@ -361,7 +342,7 @@ def nearestCells(c):
 		if [x+1, y-1] not in nCList:
 			nCList.insert(len(nCList), [x+1, y-1])
 		
-		return nCList
+	return nCList
 		
 
 if __name__ == '__main__':
