@@ -8,7 +8,7 @@ def checkArgs(inpt,b):
 	minY=float(b[2])
 	maxY=float(b[3])
 
-	if int(inpt[0])>=1 and int(inpt[0])<51790 and float(inpt[1])>=minX and float(inpt[1])<=maxX and float(inpt[2])>=minY and float(inpt[2])<=maxY :	
+	if int(inpt[0])>=1 and int(inpt[0])<51970 and float(inpt[1])>=minX and float(inpt[1])<=maxX and float(inpt[2])>=minY and float(inpt[2])<=maxY :	
 		return 1
 	else:
 		return 0
@@ -35,7 +35,7 @@ def getkq(b):
 	print('-----------------INCREMENTAL NEAREST NEIGHBOR SELECTION-----------------')
 	checked=0
 	while checked==0 or len(args)!=3:
-		args=input('Give k (1-51699), x_coordinate (%s-%s) and y_coordinate (%s-%s): ' % (b[0], b[1], b[2], b[3]) ).split(' ')
+		args=input('Give k (1-51969), x_coordinate (%s-%s) and y_coordinate (%s-%s): ' % (b[0], b[1], b[2], b[3]) ).split(' ')
 		try: 
 			checked=checkArgs(args,b)
 		except ValueError:
