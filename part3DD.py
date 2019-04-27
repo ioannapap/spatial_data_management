@@ -412,7 +412,7 @@ if __name__ == '__main__':
 		for nn in knnGenerator(q, bounds, cell):
 			if i<k:
 				print('nearestNeighbor:', nn)
-				rp3.write('%s %s\n' % ('{0:.6f}'.format(nn[0]), '{0:.6f}'.format(nn[1])))
+				rp3.write('%s %s\n' % ('{0:.6f}'.format(nn[0]), '{0:.6f}'.format(nn[1]), '{0:.6f}'.format(nn[2])))
 				i+=1
 			else:
 				print('all visited cells:', allVisitedCells)
