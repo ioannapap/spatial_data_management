@@ -190,21 +190,18 @@ def knnGenerator(q, b, cell):
 				print('allLeftAreCells', allLeftAreCells)
 				
 				if len(ordSpots)==allLeftAreCells or len(ordSpots)*len(priorityQueue)==allLeftAreCells:
-					print('indeed all left is cells') #kai kanw to idiio p tha ekana prin
+					print('indeed all left is cells print ordspots', ordSpots) #kai kanw to idiio p tha ekana prin
 					for spot in ordSpots:
-						place=0
 						nsdistance=spot[2]
 						for coord in priorityQueue:
 							inPQdistance=coord[2]
-							if nsdistance<inPQdistance and spot not in priorityQueue:
+							if nsdistance>=inPQdistance and spot not in priorityQueue:
 								print('\nspot:\n', spot)
-								priorityQueue.insert(place, spot)	
+								priorityQueue.insert(len(priorityQueue), spot)	
 								print('priorityQueue after the new spot:', priorityQueue[:20])
 								print('place:', place)
-								break	
-							else:
-								place+=1	
-					
+						
+					print(priorityQueue)
 			else:
 				print('this cell has NO spots')
 				print('now pq:', priorityQueue)
