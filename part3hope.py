@@ -129,7 +129,25 @@ def knnGenerator(q, b, cell):
 	print('ordddddddcells', ordCells)
 	while True:
 
-		if priorityQueue[0][0]>=0 and priorityQueue[0][0]<=9:
+		if not priorityQueue:
+			print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! empty pq !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+			for i in ordCells:
+				priorityQueue.insert(len(priorityQueue), i)
+			for everycell in range(len(ordCells)):
+				ordCells.pop(0)
+			allVisitedCells.insert(len(allVisitedCells), [priorityQueue[0][0], priorityQueue[0][1]])
+			newNCells=mindist(q, bounds, ordCells, [priorityQueue[0][0], priorityQueue[0][1]])
+			for i in newNCells:
+				ordCells.insert(len(ordCells), i)
+			ordSpots=orderedNSpots(q, [priorityQueue[0][0], priorityQueue[0][1]])	
+			#wihtout pop
+			print('ordered cells in list', ordCells)
+			ncell=ordCells[0]		
+			ncdistance=ncell[2]	
+			place=0
+
+
+		elif priorityQueue[0][0]>=0 and priorityQueue[0][0]<=9:
 
 			ordSpots=orderedNSpots(q, [priorityQueue[0][0], priorityQueue[0][1]])
 
@@ -190,7 +208,7 @@ def knnGenerator(q, b, cell):
 			else:
 				print('this cell has NO spots')
 				print('now pq:', priorityQueue)
-				pass
+				
 
 		elif priorityQueue[0][0]>=10:						
 			
@@ -199,19 +217,7 @@ def knnGenerator(q, b, cell):
 			
 			yield nearestNeighbor	
 			place=0
-		'''
-		elif not priorityQueue:
-			print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! empty pq !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
-			priorityQueue.insert(len(priorityQueue), ncell)
-			allVisitedCells.insert(len(allVisitedCells), [priorityQueue[0][0], priorityQueue[0][1]])
-			newNCells=mindist(q, bounds, ordCells, [priorityQueue[0][0], priorityQueue[0][1]])
-			for i in newNCells:
-				ordCells.insert(len(ordCells), i)
-			ordSpots=orderedNSpots(q, [priorityQueue[0][0], priorityQueue[0][1]])	
-			#wihtout pop
-			ncell=ordCells[0]		
-			ncdistance=ncell[2]	
-		'''	
+		
 
 def mindist(q, b, ordCells, cell):
 	
