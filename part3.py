@@ -142,11 +142,11 @@ def knnGenerator(q, b, cell):
 			
 			
 
-		'''
 		elif not priorityQueue and not ordCells:
-		 	print('break now ')
-		 	break
-		'''
+		 	for spot in ordSpots:
+		 		priorityQueue.insert(len(priorityQueue), spot)
+		 	print('now in the end we have PQ:', priorityQueue)
+		
 		if priorityQueue[0][0]>=0 and priorityQueue[0][0]<=9:
 
 			ordSpots=orderedNSpots(q, [priorityQueue[0][0], priorityQueue[0][1]])
