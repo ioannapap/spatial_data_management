@@ -317,7 +317,7 @@ def nearestCells(c):
 	elif x==9 and y==0:
 	
 		if [x+1, y] not in nCList:
-			nCList.insert(len(nCList), [x+1, y])
+			nCList.insert(len(nCList), [x-1, y])
 		if [x-1, y+1] not in nCList:
 			nCList.insert(len(nCList), [x-1, y+1])
 		if [x, y+1] not in nCList:
