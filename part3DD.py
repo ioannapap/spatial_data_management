@@ -56,7 +56,19 @@ def orderedNSpots(q, cell):
 					numspots+=1
 					row=row.split(' ')
 					if numspots<=l[3]:
-						euclideanDist=math.sqrt((float(row[1])-q[0])**2+(float(row[2])-q[1])**2)
+						
+						if float(row[1])>=q[0] and float(row[2])>=q[1]:
+							euclideanDist=math.sqrt((float(row[1])-q[0])**2+(float(row[2])-q[1])**2)
+
+						elif float(row[1])>=q[0] and float(row[2])<q[1]:
+							euclideanDist=math.sqrt((float(row[1])-q[0])**2+(q[1]-float(row[2]))**2)
+
+						elif float(row[1])<q[0] and float(row[2])>=q[1]:
+							euclideanDist=math.sqrt((q[0]-float(row[1]))**2+(float(row[2])-q[1])**2)
+
+						elif float(row[1])<q[0] and float(row[2])<q[1]:
+							euclideanDist=math.sqrt((q[0]-float(row[1]))**2+(q[1]-float(row[2]))**2)
+
 						spotList.insert(len(spotList), [float(row[1]), float(row[2]), euclideanDist] )
 
 	return sorted(spotList, key=itemgetter(2))
@@ -412,7 +424,7 @@ if __name__ == '__main__':
 		for nn in knnGenerator(q, bounds, cell):
 			if i<k:
 				print('nearestNeighbor:', nn)
-				rp3.write('%s %s\n' % ('{0:.6f}'.format(nn[0]), '{0:.6f}'.format(nn[1]), '{0:.6f}'.format(nn[2])))
+				rp3.write('%s %s %s\n' % ('{0:.6f}'.format(nn[0]), '{0:.6f}'.format(nn[1]), '{}'.format(nn[2])))
 				i+=1
 			else:
 				print('all visited cells:', allVisitedCells)
