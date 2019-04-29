@@ -56,21 +56,9 @@ def orderedNSpots(q, cell):
 					numspots+=1
 					row=row.split(' ')
 					if numspots<=l[3]:
-						
-						if float(row[1])>=q[0] and float(row[2])>=q[1]:
-							euclideanDist=math.sqrt((float(row[1])-q[0])**2+(float(row[2])-q[1])**2)
-
-						elif float(row[1])>=q[0] and float(row[2])<q[1]:
-							euclideanDist=math.sqrt((float(row[1])-q[0])**2+(q[1]-float(row[2]))**2)
-
-						elif float(row[1])<q[0] and float(row[2])>=q[1]:
-							euclideanDist=math.sqrt((q[0]-float(row[1]))**2+(float(row[2])-q[1])**2)
-
-						elif float(row[1])<q[0] and float(row[2])<q[1]:
-							euclideanDist=math.sqrt((q[0]-float(row[1]))**2+(q[1]-float(row[2]))**2)
-
+						euclideanDist=math.sqrt((float(row[1])-q[0])**2+(float(row[2])-q[1])**2)
 						spotList.insert(len(spotList), [float(row[1]), float(row[2]), euclideanDist] )
-
+						
 	return sorted(spotList, key=itemgetter(2))
 		
 
@@ -79,10 +67,11 @@ def knnGenerator(q, b, cell):
 	ordCells=[]
 	ncell=cell
 	ncdistance=0
-	emptypq=0
+	justInsertSpots=0
 	priorityQueue.insert(len(priorityQueue), ncell)
 	allVisitedCells.insert(len(allVisitedCells), [priorityQueue[0][0], priorityQueue[0][1]])
 	newNCells=mindist(q, bounds, ordCells, [priorityQueue[0][0], priorityQueue[0][1]])
+	print('newCells NEIGHBORS:', newNCells)
 	for i in newNCells:
 		ordCells.insert(len(ordCells), i)
 	ordSpots=orderedNSpots(q, [priorityQueue[0][0], priorityQueue[0][1]])	
@@ -99,64 +88,60 @@ def knnGenerator(q, b, cell):
 		for i in newNCells:
 			if i not in ordCells:
 				ordCells.insert(len(ordCells), i)		
-		ordCells=sorted(ordCells, key=itemgetter(2))
-		if ordCells:
-			ncell=ordCells[0]		
-			ncdistance=ncell[2]	
 		ordSpots=orderedNSpots(q, [priorityQueue[0][0], priorityQueue[0][1]])	
 		print('priorityQueue case with no Spots cell:', priorityQueue)
 		priorityQueue.pop(0) 
-
-	if not priorityQueue:				 #apla topothetw tin prwti fora
-		place=0
-
-		for spot in ordSpots:
-			nsdistance=spot[2]
-					
-			if nsdistance<=ncdistance:	
-				priorityQueue.insert(place, spot)
-				place+=1
-								
-			else: 					#nsdistance>ncdistance: 
-				priorityQueue.insert(place, ncell)
-				if ordCells:
-					ordCells.pop(0)
-				else:
-					break
-				if ordCells:
-					ncell=ordCells[0]		
-					ncdistance=ncell[2]	
-				else:
-					break
-					
-				place+=1
 		
+		ncell=ordCells[0]		
+		ncdistance=ncell[2]	
+
+	place=0
+	for spot in ordSpots:
+		nsdistance=spot[2]	
+
+		if nsdistance<=ncdistance:	
+			priorityQueue.insert(place, spot)
+								
+		else: 											
+			priorityQueue.insert(place, ncell)		
+			if ordCells:								
+				ordCells.pop(0)
+			if ordCells:
+				ncell=ordCells[0]		
+				ncdistance=ncell[2]	
+					
+		place+=1	
 	
-	for i in ordCells:
-		priorityQueue.insert(len(priorityQueue), i)
+	
+	for everything in ordCells:
+		priorityQueue.insert(len(priorityQueue), everything)
 	for everycell in range(len(ordCells)):
 		ordCells.pop(0)
 
 	print('priorityQueue when i put all of my first cell spots and ncells:', priorityQueue)		
-	print('ordddddddcells', ordCells)
+	##########################################################
+	
 	while True:
-		
+		#print('priorityQueue: ', priorityQueue)
+		#print('priorityQueue[0][0]', priorityQueue[0][0])
 		if not priorityQueue and ordCells:
-			print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! empty pq !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
-			ordCells=sorted(ordCells, key=itemgetter(2))
-			for i in ordCells:
-				priorityQueue.insert(len(priorityQueue), i)
-			print(priorityQueue)
+			
+			for everything in ordCells:
+				priorityQueue.insert(len(priorityQueue), everything)
+			
 			for everycell in range(len(ordCells)):
 				ordCells.pop(0)
-			
-			#den kanw ordspots giati tha ginei akrivws ekei pou tha mpei meta	
 
+			newNCells=mindist(q, bounds, ordCells, [priorityQueue[0][0], priorityQueue[0][1]])
+			for i in newNCells:
+				if i not in ordCells:
+					ordCells.insert(len(ordCells), i)		
+			
+				#now i might not have ordcells
 		elif not priorityQueue and not ordCells:
-		 	for spot in ordSpots:
-		 		priorityQueue.insert(len(priorityQueue), spot)
-		 	print('now in the end we have PQ:', priorityQueue)
-		
+			for spot in ordSpots:
+				priorityQueue.insert(len(priorityQueue), spot)
+			
 		if priorityQueue[0][0]>=0 and priorityQueue[0][0]<=9:
 
 			ordSpots=orderedNSpots(q, [priorityQueue[0][0], priorityQueue[0][1]])
@@ -164,52 +149,82 @@ def knnGenerator(q, b, cell):
 			print('found cell', [priorityQueue[0][0], priorityQueue[0][1]])
 			allVisitedCells.insert(len(allVisitedCells), [priorityQueue[0][0], priorityQueue[0][1]])
 			newNCells=mindist(q, bounds, ordCells, [priorityQueue[0][0], priorityQueue[0][1]])
+			priorityQueue.pop(0)
+
 			for i in newNCells:
 				ordCells.insert(len(ordCells), i)
 			sorted(ordCells, key=itemgetter(2))
-			priorityQueue.pop(0)
+
 			if ordCells:
 				ncell=ordCells[0]		
 				ncdistance=ncell[2]	
 				print('ncell:', ncell)
 				print(ordCells)
-			else:
+			elif not ordCells:
 				print(' i have no more ordCells ----already visited:', allVisitedCells)
-				print('priorityyq:', priorityQueue)
-				emptypq=1
-			place=0
-			
-			if ordSpots:
-				print('this cell has spots')
-				#allLeftAreCells=0
-				for spot in ordSpots:
-					place=0
-					nsdistance=spot[2]
+				justInsertSpots=1
+				
+			if justInsertSpots==0:
+				place=0
+				if ordCells:
 					for coord in priorityQueue:
 						inPQdistance=coord[2]
-						if nsdistance<inPQdistance and spot not in priorityQueue: 
-							
-							print('\n spot:\n', spot)
-							priorityQueue.insert(place, spot)	
-							print('priorityQueue after the new spot:', priorityQueue[:20])
-							print('place:', place)
-							break		
-						else:
-							place+=1
-					if emptypq==1:
+						if ncdistance<inPQdistance:								
+							priorityQueue.insert(place, ncell)
+							ordCells.pop(0)
+							if ordCells:
+								ncell=ordCells[0]		
+								ncdistance=ncell[2]
+							else:
+								break
+						place+=1
 
-						priorityQueue.insert(len(priorityQueue), spot)
 
-			else:
-				print('this cell has NO spots')
+				if ordSpots:
+					for spot in ordSpots:
+						place=0
+						nsdistance=spot[2]
+						for coord in priorityQueue:
+							inPQdistance=coord[2]
+							if nsdistance<inPQdistance and spot not in priorityQueue: 	
+								priorityQueue.insert(place, spot)	
+								break			
+							else:
+								place+=1
+					for spot in ordSpots:
+						if spot not in priorityQueue:
+							priorityQueue.insert(len(priorityQueue), spot)		
+				justInsertSpots=-1	
 				
-		elif priorityQueue[0][0]>=10:						
-			
+
+
+			elif justInsertSpots==1:
+				
+				if ordSpots:
+					for spot in ordSpots:
+						place=0
+						nsdistance=spot[2]
+						for coord in priorityQueue:
+							inPQdistance=coord[2]
+							if nsdistance<inPQdistance and spot not in priorityQueue:
+								priorityQueue.insert(place, spot)
+								break
+							else:
+								place+=1
+								
+						
+					for spot in ordSpots:
+						if spot not in priorityQueue:
+							priorityQueue.insert(len(priorityQueue), spot)
+				justInsertSpots=-1	
+	
+		else:					
+				
 			nearestNeighbor=priorityQueue[0]
 			priorityQueue.pop(0)
-			
+				
 			yield nearestNeighbor	
-			place=0
+			
 		
 
 def mindist(q, b, ordCells, cell):
@@ -328,8 +343,8 @@ def nearestCells(c):
 		
 	elif x==9 and y==0:
 	
-		if [x+1, y] not in nCList:
-			nCList.insert(len(nCList), [x+1, y])
+		if [x-1, y] not in nCList:
+			nCList.insert(len(nCList), [x-1, y])
 		if [x-1, y+1] not in nCList:
 			nCList.insert(len(nCList), [x-1, y+1])
 		if [x, y+1] not in nCList:
