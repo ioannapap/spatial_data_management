@@ -65,15 +65,12 @@ def orderedNSpots(q, cell):
 def knnGenerator(q, k, b, cell):
 
 	countSpots=0
-	ordCells=[]
+	ordCells=[[cell[0], cell[1], 0]]
 	ordSpots=[]
 	firstSpotNeighborCells=[]
-	priorityQueue.insert(len(priorityQueue), cell)
+	priorityQueue.insert(len(priorityQueue), [cell[0], cell[1], 0])
 	wheresLastSpot=-1 #because if last spot is the first element in the queue i want to be 0.
-	#while True:
-##################################################################################################CELL
-		#if priorityQueue[0][0]>=0 and priorityQueue[0][1]<=9:
-			
+########################################################################################		
 	inserting(priorityQueue[0][0], priorityQueue[0][1], countSpots, ordCells, ordSpots, firstSpotNeighborCells, allVisitedCells)
 			##########################################
 	for element in priorityQueue:			
@@ -84,10 +81,9 @@ def knnGenerator(q, k, b, cell):
 		 	break
 		 	
 	while lastSpot and firstSpotNeighborCells:			 #while lastSpot means that we still have NEIGHBORs to visit
-		print('lastSpot[2]', lastSpot[2])												 #k>=wheresLastSpot means that we definately need to open up the next cell 'cause spots inadequate	
-		print('firstSpotNeighborCells[0][2]', firstSpotNeighborCells[0][2])
+		print('lastSpot dist in pq:', lastSpot[2])												 #k>=wheresLastSpot means that we definately need to open up the next cell 'cause spots inadequate	
+		print('firstSpot dist in next nearest cell:', firstSpotNeighborCells[0][2])
 		while float(lastSpot[2])>float(firstSpotNeighborCells[0][2]) or k>=wheresLastSpot+1: #if the last spot before cell in pq is more far than the first spot in next ncell:
-		 	
 		 	inserting(firstSpotNeighborCells[0][0], firstSpotNeighborCells[0][1], countSpots, ordCells, ordSpots, firstSpotNeighborCells, allVisitedCells)
 		 	firstSpotNeighborCells.pop(0)
 		 	for element in priorityQueue:			
@@ -113,7 +109,7 @@ def inserting(xcoord, ycoord, countSpots, ordCells, ordSpots, firstSpotNeighborC
 	
 	allVisitedCells.insert(len(allVisitedCells), [xcoord, ycoord])
 	newNCells=mindist(q, bounds,ordCells, [xcoord, ycoord])
-	print('new nearestNeighbor CELLS:', newNCells)		
+	print('new nearestNeighbor cells:', newNCells)		
 	for i in newNCells:
 		if i not in ordCells:	
 			#****************************************	
@@ -124,8 +120,14 @@ def inserting(xcoord, ycoord, countSpots, ordCells, ordSpots, firstSpotNeighborC
 			#*******************************************
 			ordCells.insert(len(ordCells), i)		
 			
-	ordSpots=orderedNSpots(q, [xcoord, ycoord])		
-	priorityQueue.pop(0)
+	ordSpots=orderedNSpots(q, [xcoord, ycoord])
+	for cells in ordCells:
+		if cells[0]==xcoord and cells[1]==ycoord:
+			xdl=cells[2]
+			break
+
+	priorityQueue.remove([xcoord, ycoord, xdl])
+	print('pq after removing cell', priorityQueue)
 	################
 	#about to insert new spots to the pq (if i dont have it's fine- just skips it)
 	for spot in ordSpots:
@@ -158,7 +160,7 @@ def inserting(xcoord, ycoord, countSpots, ordCells, ordSpots, firstSpotNeighborC
 	for c in newNCells: #quicker this way no ordCells:
 		if c not in priorityQueue:
 			priorityQueue.insert(len(priorityQueue), c)	
-	print('pq after inserting spots and cells:\n', priorityQueue[:13])
+	print('pq after inserting spots and cells:\n', priorityQueue)
 	print(len(priorityQueue))
 
 def mindist(q, b, ordCells, cell):
