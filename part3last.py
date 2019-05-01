@@ -1,6 +1,6 @@
 import math
 from operator import itemgetter
-
+import time
 def checkArgs(inpt,b): 								
 	
 	minX=float(b[0])
@@ -73,7 +73,6 @@ def knnGenerator(q, k, b, cell):
 	wheresLastSpot=-1 #because if last spot is the first element in the queue i want to be 0.
 ########################################################################################		
 	while haveCell==1:
-		print('first time')
 		inserting(priorityQueue[0][0], priorityQueue[0][1], countSpots, ordCells, ordSpots, firstSpotNeighborCells, allVisitedCells)
 		firstSpotNeighborCells.pop(0)
 		for element in priorityQueue:			
@@ -115,16 +114,17 @@ def inserting(xcoord, ycoord, countSpots, ordCells, ordSpots, firstSpotNeighborC
 	allVisitedCells.insert(len(allVisitedCells), [xcoord, ycoord])
 	newNCells=mindist(q, bounds,ordCells, [xcoord, ycoord])
 	print('new nearestNeighbor cells:', newNCells)	#it might be empty	
-	if newNCells:
-		for i in newNCells:
-			if i not in ordCells:	
-				#****************************************	
-				newiSpots=orderedNSpots(q, [i[0], i[1]])
+	
+	for i in newNCells:
+		if i not in ordCells:	
+			#****************************************	
+			newiSpots=orderedNSpots(q, [i[0], i[1]])
+			if newiSpots:
 				firstSpotDist=newiSpots[0][2]
 				p=[i[0], i[1], firstSpotDist]
 				firstSpotNeighborCells.insert(len(firstSpotNeighborCells), p)
-				#*******************************************
-				ordCells.insert(len(ordCells), i)		
+			#*******************************************
+			ordCells.insert(len(ordCells), i)		
 				
 	ordSpots=orderedNSpots(q, [xcoord, ycoord])
 	for cells in ordCells:
@@ -165,7 +165,7 @@ def inserting(xcoord, ycoord, countSpots, ordCells, ordSpots, firstSpotNeighborC
 	for c in newNCells: #quicker this way no ordCells:
 		if c not in priorityQueue:
 			priorityQueue.insert(len(priorityQueue), c)	
-	print('pq after inserting spots and cells:\n', priorityQueue)
+	#print('pq after inserting spots and cells:\n', priorityQueue)
 	print(len(priorityQueue))
 
 def mindist(q, b, ordCells, cell):
@@ -388,3 +388,4 @@ if __name__ == '__main__':
 
 					rp3.write(str(i))
 				break
+		print("--- %s seconds ---" % (time.time() - startTime))
