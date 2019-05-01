@@ -1,6 +1,7 @@
 import math
 from operator import itemgetter
 import time
+startTime = time.time()
 def checkArgs(inpt,b): 								
 	
 	minX=float(b[0])
@@ -69,12 +70,17 @@ def knnGenerator(q, k, b, cell):
 	firstSpotNeighborCells=[]
 	haveCell=1
 	countSpots=0
+	firsTime=1
 	priorityQueue.insert(len(priorityQueue), [cell[0], cell[1], 0])
 	wheresLastSpot=-1 #because if last spot is the first element in the queue i want to be 0.
-########################################################################################		
+	
 	while haveCell==1:
 		inserting(priorityQueue[0][0], priorityQueue[0][1], countSpots, ordCells, ordSpots, firstSpotNeighborCells, allVisitedCells)
-		firstSpotNeighborCells.pop(0)
+		print('pq:', priorityQueue[:20])
+		if firsTime==1: #the firstTime im not in a neighbor IM In the Cell so i shouldnt remove firstSpotNeighborCells
+			firsTime=0
+		else:
+			firstSpotNeighborCells.pop(0)
 		for element in priorityQueue:			
 			if element[0]>=10:
 		 		lastSpot=element
@@ -85,20 +91,29 @@ def knnGenerator(q, k, b, cell):
 
 	while haveCell==0 and firstSpotNeighborCells:			 #while lastSpot means that we still have NEIGHBORs to visit
 		print('lastSpot dist in pq:', lastSpot[2])												 #k>=wheresLastSpot means that we definately need to open up the next cell 'cause spots inadequate	
-		print('firstSpot dist in next nearest cell:', firstSpotNeighborCells[0][2])
-		while float(lastSpot[2])>float(firstSpotNeighborCells[0][2]) or k>=wheresLastSpot+1: #if the last spot before cell in pq is more far than the first spot in next ncell:
-		 	print('firstSpotNeighborCells[0][0], firstSpotNeighborCells[0][1]', [firstSpotNeighborCells[0][0], firstSpotNeighborCells[0][1]] )
+		print('firstSpot dist in next nearest cell:', firstSpotNeighborCells[0])
+		while lastSpot[2]>firstSpotNeighborCells[0][2] or k>=wheresLastSpot+1: #if the last spot before cell in pq is more far than the first spot in next ncell:
+		 	print('inserting ...', [firstSpotNeighborCells[0][0], firstSpotNeighborCells[0][1]] )
 		 	inserting(firstSpotNeighborCells[0][0], firstSpotNeighborCells[0][1], countSpots, ordCells, ordSpots, firstSpotNeighborCells, allVisitedCells)
+		 	
+		 	for element in priorityQueue:
+		 		if element[2]<firstSpotNeighborCells[0][2] and k>100 and len(priorityQueue)>400:
+		 			nearestNeighbor=element
+		 			yield nearestNeighbor
+		 		else:
+		 			break
+
 		 	firstSpotNeighborCells.pop(0)
+		 	wheresLastSpot=-1
 		 	for element in priorityQueue:			
 		 		if element[0]>=10:
 		 			lastSpot=element
 		 			wheresLastSpot+=1
 		 		else:
-		 			break
+		 			break		 	
 		break
 	
-	if float(lastSpot[2])<=float(firstSpotNeighborCells[0][2]) and k<wheresLastSpot+1:
+	if lastSpot[2]<=firstSpotNeighborCells[0][2] and k<wheresLastSpot+1:
 		#yield all
 		for element in priorityQueue:
 		 	if element[0]>=10:
