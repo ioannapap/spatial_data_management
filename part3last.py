@@ -95,13 +95,6 @@ def knnGenerator(q, k, b, cell):
 		while lastSpot[2]>firstSpotNeighborCells[0][2] or k>=wheresLastSpot+1: #if the last spot before cell in pq is more far than the first spot in next ncell:
 		 	print('inserting ...', [firstSpotNeighborCells[0][0], firstSpotNeighborCells[0][1]] )
 		 	inserting(firstSpotNeighborCells[0][0], firstSpotNeighborCells[0][1], countSpots, ordCells, ordSpots, firstSpotNeighborCells, allVisitedCells)
-		 	
-		 	for element in priorityQueue:
-		 		if element[2]<firstSpotNeighborCells[0][2] and k>100 and len(priorityQueue)>400:
-		 			nearestNeighbor=element
-		 			yield nearestNeighbor
-		 		else:
-		 			break
 
 		 	firstSpotNeighborCells.pop(0)
 		 	wheresLastSpot=-1
