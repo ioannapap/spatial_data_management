@@ -82,10 +82,11 @@ def knnGenerator(q, k, b, cell):
 		 	wheresLastSpot+=1
 		else:
 		 	break
-		 	#while lastSpot means that we still have NEIGHBORs to visit
-	while lastSpot and firstSpotNeighborCells:	#k>=wheresLastSpot means that we definately need to open up the next cell 'cause spots inadequate
-		
-		while lastSpot[2]>firstSpotNeighborCells[0][2] or k>=wheresLastSpot+1: #if the last spot before cell in pq is more far than the first spot in next ncell:
+		 	
+	while lastSpot and firstSpotNeighborCells:			 #while lastSpot means that we still have NEIGHBORs to visit
+		print('lastSpot[2]', lastSpot[2])												 #k>=wheresLastSpot means that we definately need to open up the next cell 'cause spots inadequate	
+		print('firstSpotNeighborCells[0][2]', firstSpotNeighborCells[0][2])
+		while float(lastSpot[2])>float(firstSpotNeighborCells[0][2]) or k>=wheresLastSpot+1: #if the last spot before cell in pq is more far than the first spot in next ncell:
 		 	
 		 	inserting(firstSpotNeighborCells[0][0], firstSpotNeighborCells[0][1], countSpots, ordCells, ordSpots, firstSpotNeighborCells, allVisitedCells)
 		 	firstSpotNeighborCells.pop(0)
@@ -97,7 +98,7 @@ def knnGenerator(q, k, b, cell):
 		 			break
 		break
 
-	if lastSpot[2]<=firstSpotNeighborCells[0][2] and k<wheresLastSpot+1:
+	if float(lastSpot[2])<=float(firstSpotNeighborCells[0][2]) and k<wheresLastSpot+1:
 		#yield all
 		for element in priorityQueue:
 		 	if element[0]>=10:
@@ -114,11 +115,13 @@ def inserting(xcoord, ycoord, countSpots, ordCells, ordSpots, firstSpotNeighborC
 	newNCells=mindist(q, bounds,ordCells, [xcoord, ycoord])
 	print('new nearestNeighbor CELLS:', newNCells)		
 	for i in newNCells:
-		if i not in ordCells:		
-			firstSpot=orderedNSpots(q, [i[0], i[1]])
-			firstSpot=firstSpot[0]
-			firstSpotNeighborCells.insert(len(firstSpotNeighborCells), [i[0], i[1], firstSpot])
-
+		if i not in ordCells:	
+			#****************************************	
+			newiSpots=orderedNSpots(q, [i[0], i[1]])
+			firstSpotDist=newiSpots[0][2]
+			p=[i[0], i[1], firstSpotDist]
+			firstSpotNeighborCells.insert(len(firstSpotNeighborCells), p)
+			#*******************************************
 			ordCells.insert(len(ordCells), i)		
 			
 	ordSpots=orderedNSpots(q, [xcoord, ycoord])		
