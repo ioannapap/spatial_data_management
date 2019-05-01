@@ -90,7 +90,7 @@ def knnGenerator(q, k, b, cell):
 				break
 
 	while haveCell==0 and firstSpotNeighborCells:			 #while lastSpot means that we still have NEIGHBORs to visit
-		print('lastSpot dist in pq:', lastSpot[2])												 #k>=wheresLastSpot means that we definately need to open up the next cell 'cause spots inadequate	
+		print('lastSpot dist in pq:', lastSpot)												 #k>=wheresLastSpot means that we definately need to open up the next cell 'cause spots inadequate	
 		print('firstSpot dist in next nearest cell:', firstSpotNeighborCells[0])
 		while lastSpot[2]>firstSpotNeighborCells[0][2] or k>=wheresLastSpot+1: #if the last spot before cell in pq is more far than the first spot in next ncell:
 		 	print('inserting ...', [firstSpotNeighborCells[0][0], firstSpotNeighborCells[0][1]] )
@@ -103,7 +103,8 @@ def knnGenerator(q, k, b, cell):
 		 			lastSpot=element
 		 			wheresLastSpot+=1
 		 		else:
-		 			break		 	
+		 			break		
+
 		break
 	
 	if lastSpot[2]<=firstSpotNeighborCells[0][2] and k<wheresLastSpot+1:
@@ -165,15 +166,14 @@ def inserting(xcoord, ycoord, countSpots, ordCells, ordSpots, firstSpotNeighborC
 		celldist=c[2]
 		for element in priorityQueue:
 			eldist=element[2]
-			if celldist<eldist and c not in priorityQueue:
+			if celldist<eldist:
 				priorityQueue.insert(place, c)
 				break
 			else:
 				place+=1
 	for c in newNCells: #quicker this way no ordCells:
-		if c not in priorityQueue:
-			priorityQueue.insert(len(priorityQueue), c)	
-	#print('pq after inserting spots and cells:\n', priorityQueue)
+		priorityQueue.insert(len(priorityQueue), c)	
+	
 	print(len(priorityQueue))
 
 def mindist(q, b, ordCells, cell):
