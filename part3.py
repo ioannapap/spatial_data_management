@@ -1,5 +1,7 @@
 import math
 from operator import itemgetter
+import time
+startTime = time.time()
 
 def checkArgs(inpt,b): 								
 	
@@ -58,147 +60,204 @@ def orderedNSpots(q, cell):
 					if numspots<=l[3]:
 						euclideanDist=math.sqrt((float(row[1])-q[0])**2+(float(row[2])-q[1])**2)
 						spotList.insert(len(spotList), [float(row[1]), float(row[2]), euclideanDist] )
-
+						
 	return sorted(spotList, key=itemgetter(2))
 		
 
-def knnGenerator(q, b, cell):
-
-	ordCells=[]
-	ncell=cell
-	ncdistance=0
-	emptypq=0
-	priorityQueue.insert(len(priorityQueue), ncell)
-	allVisitedCells.insert(len(allVisitedCells), [priorityQueue[0][0], priorityQueue[0][1]])
-	newNCells=mindist(q, bounds, ordCells, [priorityQueue[0][0], priorityQueue[0][1]])
-	for i in newNCells:
-		ordCells.insert(len(ordCells), i)
-	ordSpots=orderedNSpots(q, [priorityQueue[0][0], priorityQueue[0][1]])	
-	priorityQueue.pop(0) 
+def knnGenerator(q, k, b, cell):
 	
-	ncell=ordCells[0]		
-	ncdistance=ncell[2]	
-	
-	while not ordSpots:
-		priorityQueue.insert(len(priorityQueue), ncell)
-		ordCells.pop(0)
-		allVisitedCells.insert(len(allVisitedCells), [priorityQueue[0][0], priorityQueue[0][1]])
-		newNCells=mindist(q, bounds, ordCells, [priorityQueue[0][0], priorityQueue[0][1]])
-		for i in newNCells:
-			if i not in ordCells:
-				ordCells.insert(len(ordCells), i)		
-		ordCells=sorted(ordCells, key=itemgetter(2))
-		if ordCells:
-			ncell=ordCells[0]		
-			ncdistance=ncell[2]	
-		ordSpots=orderedNSpots(q, [priorityQueue[0][0], priorityQueue[0][1]])	
-		print('priorityQueue case with no Spots cell:', priorityQueue)
-		priorityQueue.pop(0) 
-
-	if not priorityQueue:				 #apla topothetw tin prwti fora
-		place=0
-
-		for spot in ordSpots:
-			nsdistance=spot[2]
-					
-			if nsdistance<=ncdistance:	
-				priorityQueue.insert(place, spot)
-				place+=1
-								
-			else: 					#nsdistance>ncdistance: 
-				priorityQueue.insert(place, ncell)
-				if ordCells:
-					ordCells.pop(0)
-				else:
-					break
-				if ordCells:
-					ncell=ordCells[0]		
-					ncdistance=ncell[2]	
-				else:
-					break
-					
-				place+=1
-		
-	
-	for i in ordCells:
-		priorityQueue.insert(len(priorityQueue), i)
-	for everycell in range(len(ordCells)):
-		ordCells.pop(0)
-
-	print('priorityQueue when i put all of my first cell spots and ncells:', priorityQueue)		
-	print('ordddddddcells', ordCells)
+	ordCells=[[cell[0], cell[1], 0]]
+	ordSpots=[]
+	firstSpotNeighborCells=[]
+	haveCell=1
+	firstTime=1
+	countSpots=0
+	canYield=0
+	priorityQueue.insert(len(priorityQueue), [cell[0], cell[1], 0])
+	wheresLastSpot=-1 #because if last spot is the first element in the queue i want to be 0.
+	lastSpot=[]
 	while True:
-		
-		if not priorityQueue and ordCells:
-			print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! empty pq !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
-			ordCells=sorted(ordCells, key=itemgetter(2))
-			for i in ordCells:
-				priorityQueue.insert(len(priorityQueue), i)
-			print(priorityQueue)
-			for everycell in range(len(ordCells)):
-				ordCells.pop(0)
-			
-			#den kanw ordspots giati tha ginei akrivws ekei pou tha mpei meta	
 
-		elif not priorityQueue and not ordCells:
-		 	for spot in ordSpots:
-		 		priorityQueue.insert(len(priorityQueue), spot)
-		 	print('now in the end we have PQ:', priorityQueue)
-		
-		if priorityQueue[0][0]>=0 and priorityQueue[0][0]<=9:
-
-			ordSpots=orderedNSpots(q, [priorityQueue[0][0], priorityQueue[0][1]])
-
-			print('found cell', [priorityQueue[0][0], priorityQueue[0][1]])
-			allVisitedCells.insert(len(allVisitedCells), [priorityQueue[0][0], priorityQueue[0][1]])
-			newNCells=mindist(q, bounds, ordCells, [priorityQueue[0][0], priorityQueue[0][1]])
-			for i in newNCells:
-				ordCells.insert(len(ordCells), i)
-			sorted(ordCells, key=itemgetter(2))
-			priorityQueue.pop(0)
-			if ordCells:
-				ncell=ordCells[0]		
-				ncdistance=ncell[2]	
-				print('ncell:', ncell)
-				print(ordCells)
-			else:
-				print(' i have no more ordCells ----already visited:', allVisitedCells)
-				print('priorityyq:', priorityQueue)
-				emptypq=1
-			place=0
-			
-			if ordSpots:
-				print('this cell has spots')
-				#allLeftAreCells=0
-				for spot in ordSpots:
-					place=0
-					nsdistance=spot[2]
-					for coord in priorityQueue:
-						inPQdistance=coord[2]
-						if nsdistance<inPQdistance and spot not in priorityQueue: 
-							
-							print('\n spot:\n', spot)
-							priorityQueue.insert(place, spot)	
-							print('priorityQueue after the new spot:', priorityQueue[:20])
-							print('place:', place)
-							break		
-						else:
-							place+=1
-					if emptypq==1:
-
-						priorityQueue.insert(len(priorityQueue), spot)
-
-			else:
-				print('this cell has NO spots')
+		if haveCell==1:
+			print('priorityQueue[0]', priorityQueue[0])
+			inserting(priorityQueue[0][0], priorityQueue[0][1], firstTime, countSpots, ordCells, ordSpots, firstSpotNeighborCells, allVisitedCells)
+			print('pq:', priorityQueue)
+			if firstTime==1:
+				firstTime=0
+			wheresLastSpot=-1
+			for element in priorityQueue:			
+				if element[0]>=10:
+					lastSpot=element
+					wheresLastSpot+=1
+					haveCell=0 #to be here means that i do have at least one spot
+				else:
+					break
+			print('lastSpot dist in pq:', lastSpot)												
+			print('firstSpot dist in next nearest cell:', firstSpotNeighborCells[0])	
+			 
+		#iflastSpot means that we still have NEIGHBORs to visit
+		elif haveCell==0 and firstSpotNeighborCells and lastSpot[2]>firstSpotNeighborCells[0][2] and k>=wheresLastSpot+1: 			#if the last spot before cell in pq is more far than the first spot in next ncell:
+			print('lastSpot dist in pq:', lastSpot)												 									#k>=wheresLastSpot means that we definately need to open up the next cell 'cause spots inadequate	
+			print('firstSpot dist in next nearest cell:', firstSpotNeighborCells[0])
+			print('inserting ...', [firstSpotNeighborCells[0][0], firstSpotNeighborCells[0][1]] )
+			inserting(firstSpotNeighborCells[0][0], firstSpotNeighborCells[0][1], firstTime, countSpots, ordCells, ordSpots, firstSpotNeighborCells, allVisitedCells)
+			print('pq:', priorityQueue[:60])
+		 	#let's find the next lastSpot before cell in pq
+			wheresLastSpot=-1
+			for element in priorityQueue:			
+				if element[0]>=10:
+					lastSpot=element
+					wheresLastSpot+=1
+				else:
+					if priorityQueue[0][0]>=0 and priorityQueue[0][0]<=9:
+						haveCell=1
+					break	
 				
-		elif priorityQueue[0][0]>=10:						
-			
-			nearestNeighbor=priorityQueue[0]
-			priorityQueue.pop(0)
-			
-			yield nearestNeighbor	
-			place=0
-		
+
+		elif haveCell==0 and firstSpotNeighborCells and lastSpot[2]<=firstSpotNeighborCells[0][2] and k>=wheresLastSpot+1:
+			#yield some
+			for element in priorityQueue:
+				#print('element #', element)
+				canYield=0
+				checked=0
+				if element[0]>=10 and checked==0:
+					for ncell in firstSpotNeighborCells:
+						if lastSpot[2]<=ncell[2]: #maybe is <= from the firstSpotNeighborCell but not for all (maybe another one is closer for spots)
+							canYield=1
+						else: 									#means that we found the first element in the pq before lastSpot that is > than the firstSpotNeighborCells distance so...
+				 			canYield=0
+				 			checked=1
+				 			inserting(ncell[0], ncell[1], firstTime, countSpots, ordCells, ordSpots, firstSpotNeighborCells, allVisitedCells)
+		 					#let's find the next lastSpot before cell in pq
+		 					wheresLastSpot=-1
+		 					for element in priorityQueue:			
+		 						if element[0]>=10:
+		 							lastSpot=element
+		 							wheresLastSpot+=1
+		 						else:
+		 							if priorityQueue[0][0]>=0 and priorityQueue[0][0]<=9:
+		 								haveCell=1
+		 							break		
+				 			break
+						if canYield==1:
+							checked=1
+							nearestNeighbor=element
+							priorityQueue.remove(element)
+							yield nearestNeighbor
+							break
+				else:
+					if element[0]>=0 and element[0]<=9:
+						haveCell=1
+				break			
+
+		elif haveCell==0 and firstSpotNeighborCells and lastSpot[2]>firstSpotNeighborCells[0][2] and k<wheresLastSpot+1:
+			#yield some
+			for element in priorityQueue:
+				canYield=0
+				checked=0
+				if element[0]>=10 and checked==0:
+					for ncell in firstSpotNeighborCells:
+				 		if element[2]<=ncell[2]: #from all
+				 			canYield=1
+				 		else: #means that we found the first element in the pq before lastSpot that is > than the firstSpotNeighborCells distance so...
+				 			canYield=0
+				 			checked=1
+				 			inserting(ncell[0], ncell[1], firstTime, countSpots, ordCells, ordSpots, firstSpotNeighborCells, allVisitedCells)
+		 					#let's find the next lastSpot before cell in pq
+		 					wheresLastSpot=-1
+		 					for element in priorityQueue:			
+		 						if element[0]>=10:
+		 							lastSpot=element
+		 							wheresLastSpot+=1
+		 						else:
+		 							if priorityQueue[0][0]>=0 and priorityQueue[0][0]<=9:
+		 								haveCell=1
+		 							break		
+				 			break
+				 		if canYield==1:
+				 			checked=1
+					 		nearestNeighbor=element
+					 		priorityQueue.remove(element)
+					 		yield nearestNeighbor
+					 		break
+				else:
+					if element[0]>=0 and element[0]<=9:
+						haveCell=1
+				break
+		#here we dont care about cells or about firstSpotNeighborCells
+
+		elif lastSpot[2]<=firstSpotNeighborCells[0][2] and k<wheresLastSpot+1:
+			#yield all
+			for element in priorityQueue:
+			 	if element[0]>=10:
+			 		nearestNeighbor=element
+			 		yield nearestNeighbor
+
+######################################################################################################	
+				 	
+def inserting(xcoord, ycoord, firstTime, countSpots, ordCells, ordSpots, firstSpotNeighborCells, allVisitedCells):
+	
+	if firstTime==0:
+		for f in firstSpotNeighborCells:
+			if f[0]==xcoord and f[1]==ycoord:
+				firstSpotNeighborCells.remove(f)
+				break
+
+	allVisitedCells.insert(len(allVisitedCells), [xcoord, ycoord])
+	newNCells=mindist(q, bounds,ordCells, [xcoord, ycoord])
+	print('after removing cell these are the new neighbors to insert:', newNCells)	#it might be empty	
+	
+	for i in newNCells:
+		if i not in ordCells:	
+			#****************************************	
+			newiSpots=orderedNSpots(q, [i[0], i[1]])
+			if newiSpots:
+				firstSpotDist=newiSpots[0][2]
+				p=[i[0], i[1], firstSpotDist]
+				firstSpotNeighborCells.insert(len(firstSpotNeighborCells), p)
+			#*******************************************
+			ordCells.insert(len(ordCells), i)		
+				
+	ordSpots=orderedNSpots(q, [xcoord, ycoord])
+	for cells in ordCells:
+		if cells[0]==xcoord and cells[1]==ycoord:
+			xdl=cells[2]
+			break
+
+	priorityQueue.remove([xcoord, ycoord, xdl])
+	################
+	#about to insert new spots to the pq (if i dont have it's fine- just skips it)
+	for spot in ordSpots:
+		place=0
+		spotdist=spot[2]
+		for element in priorityQueue:
+			eldist=element[2]
+			if spotdist<=eldist and spot not in priorityQueue:
+				priorityQueue.insert(place, spot)	
+				countSpots+=1
+				break			
+			else:
+				place+=1
+	for spot in ordSpots:
+		if spot not in priorityQueue:
+			priorityQueue.insert(len(priorityQueue), spot)
+			countSpots+=1	
+	#################
+	#about to insert new cells to the pq (if i dont have it's fine- just skips it)
+	for c in newNCells: #quicker this way no ordCells:
+		place=0
+		celldist=c[2]
+		for element in priorityQueue:
+			eldist=element[2]
+			if celldist<eldist:
+				priorityQueue.insert(place, c)
+				break
+			else:
+				place+=1
+	for c in newNCells: #quicker this way no ordCells:
+		priorityQueue.insert(len(priorityQueue), c)	
+	
+	print('length of pq:', len(priorityQueue))
 
 def mindist(q, b, ordCells, cell):
 	
@@ -316,7 +375,7 @@ def nearestCells(c):
 		
 	elif x==9 and y==0:
 	
-		if [x+1, y] not in nCList:
+		if [x-1, y] not in nCList:
 			nCList.insert(len(nCList), [x-1, y])
 		if [x-1, y+1] not in nCList:
 			nCList.insert(len(nCList), [x-1, y+1])
@@ -409,10 +468,10 @@ if __name__ == '__main__':
 	
 	with open('results_part3.txt', 'w', encoding='UTF-8') as rp3: 
 		i=0
-		for nn in knnGenerator(q, bounds, cell):
+		for nn in knnGenerator(q, k, bounds, cell):
 			if i<k:
 				print('nearestNeighbor:', nn)
-				rp3.write('%s %s\n' % ('{0:.6f}'.format(nn[0]), '{0:.6f}'.format(nn[1])))
+				rp3.write('%s %s %s\n' % ('{0:.6f}'.format(nn[0]), '{0:.6f}'.format(nn[1]), '{}'.format(nn[2])))
 				i+=1
 			else:
 				print('all visited cells:', allVisitedCells)
@@ -420,3 +479,4 @@ if __name__ == '__main__':
 
 					rp3.write(str(i))
 				break
+		print("--- %s seconds ---" % (time.time() - startTime))
