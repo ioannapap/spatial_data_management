@@ -1,5 +1,4 @@
 import math
-from operator import itemgetter
 
 def dirData():
 
@@ -59,226 +58,6 @@ def findqCell(q, b):
 			if q[0]>=lowerXCellBound and q[0]<=upperXCellBound and q[1]>=lowerYCellBound and q[1]<=upperYCellBound:
 				
 				return [x,y]		
-
-
-
-def nearestCells(c):
-	
-	x=c[0]
-	y=c[1]
-	
-	if [x,y] not in nCList:
-		nCList.insert(len(nCList), [x,y])
-	
-	if x==0 and y==0:
-		
-		if [x, y+1] not in nCList:
-			nCList.insert(len(nCList), [x, y+1]) 
-		if [x+1, y+1] not in nCList:
-			nCList.insert(len(nCList), [x+1, y+1])
-		if [x+1, y] not in nCList:
-			nCList.insert(len(nCList), [x+1, y])
-		
-	elif x==0 and y>=1 and y<=8:
-		
-		if [x, y+1] not in nCList:
-			nCList.insert(len(nCList), [x, y+1]) 
-		if [x+1, y+1] not in nCList:
-			nCList.insert(len(nCList), [x+1, y+1])
-		if [x+1, y] not in nCList:
-			nCList.insert(len(nCList), [x+1, y])
-		if [x+1, y-1] not in nCList:
-			nCList.insert(len(nCList), [x+1, y-1])
-		if [x, y-1] not in nCList:
-			nCList.insert(len(nCList), [x, y-1])
-	
-	elif x==0 and y==9:
-	
-		if [x+1, y] not in nCList:
-			nCList.insert(len(nCList), [x+1, y])
-		if [x+1, y-1] not in nCList:
-			nCList.insert(len(nCList), [x+1, y-1])
-		if [x, y-1] not in nCList:
-			nCList.insert(len(nCList), [x, y-1])
-		
-	elif x==9 and y==0:
-	
-		if [x-1, y] not in nCList:
-			nCList.insert(len(nCList), [x-1, y])
-		if [x-1, y+1] not in nCList:
-			nCList.insert(len(nCList), [x-1, y+1])
-		if [x, y+1] not in nCList:
-			nCList.insert(len(nCList), [x, y+1]) 
-
-	elif x>=1 and x<=8 and y==0:
-		
-		if [x-1, y] not in nCList:
-			nCList.insert(len(nCList), [x-1, y])
-		if [x-1, y+1] not in nCList:
-			nCList.insert(len(nCList), [x-1, y+1])
-		if [x, y+1] not in nCList:
-			nCList.insert(len(nCList), [x, y+1]) 
-		if [x+1, y+1] not in nCList:
-			nCList.insert(len(nCList), [x+1, y+1])
-		if [x+1, y] not in nCList:
-			nCList.insert(len(nCList), [x+1, y])
-		
-	elif x==9 and y==9:
-		
-		if [x-1, y] not in nCList:
-			nCList.insert(len(nCList), [x-1, y])
-		if [x-1, y-1] not in nCList:
-			nCList.insert(len(nCList), [x-1, y-1])
-		if [x, y-1] not in nCList:
-			nCList.insert(len(nCList), [x, y-1])
-
-	elif x>=1 and x<=8 and y==9:
-		
-		if [x-1, y] not in nCList:
-			nCList.insert(len(nCList), [x-1, y])
-		if [x-1, y-1] not in nCList:
-			nCList.insert(len(nCList), [x-1, y-1])
-		if [x, y-1] not in nCList:
-			nCList.insert(len(nCList), [x, y-1])
-		if [x+1, y-1] not in nCList:
-			nCList.insert(len(nCList), [x+1, y-1])
-		if [x+1, y] not in nCList:
-			nCList.insert(len(nCList), [x+1, y])
-		
-	elif x==9 and y>=1 and y<=8:
-		
-		if [x, y+1] not in nCList:
-			nCList.insert(len(nCList), [x, y+1])
-		if [x-1, y+1] not in nCList:
-			nCList.insert(len(nCList), [x-1, y+1])
-		if [x-1, y] not in nCList:
-			nCList.insert(len(nCList), [x-1, y])
-		if [x-1, y-1] not in nCList:
-			nCList.insert(len(nCList), [x-1, y-1])
-		if [x, y-1] not in nCList:
-			nCList.insert(len(nCList), [x, y-1])
-	
-	else:
-		
-		if [x-1, y+1] not in nCList:
-			nCList.insert(len(nCList), [x-1, y+1])
-		if [x, y+1] not in nCList:
-			nCList.insert(len(nCList), [x, y+1])
-		if [x+1, y+1] not in nCList:
-			nCList.insert(len(nCList), [x+1, y+1])
-		if [x-1, y] not in nCList:
-			nCList.insert(len(nCList), [x-1, y])
-		if [x+1, y] not in nCList:
-			nCList.insert(len(nCList), [x+1, y])	
-		if [x-1, y-1] not in nCList:
-			nCList.insert(len(nCList), [x-1, y-1])
-		if [x, y-1] not in nCList:
-			nCList.insert(len(nCList), [x, y-1])
-		if [x+1, y-1] not in nCList:
-			nCList.insert(len(nCList), [x+1, y-1])
-		
-	return nCList
-
-
-def putOrder(aList, x, y, distance):
-
-	if len(aList)==0:
-		aList.insert(len(aList), [x, y, distance])
-		return aList
-
-	place=0
-	for a in aList:
-		
-		if distance<=a[2]:
-			aList.insert(place, [x, y, distance])
-			return aList
-		else:
-			place+=1
-
-
-	for a in aList:
-		if [x, y, distance] not in a:
-			aList.insert(len(aList), [x, y, distance])
-			return aList
-
-
-def orderedNSpots(q, cell):
-	
-	spotList=[]
-	for l in dirList:
-		numspots=0
-		if l[0]==cell[0] and l[1]==cell[1]:
-			
-			with open('grid.grd', 'r', encoding='UTF-8') as dfgrd: 
-				dfgrd.seek(l[2])
-				for row in dfgrd:	
-					numspots+=1
-					row=row.split(' ')
-					if numspots<=l[3]:
-						euclideanDist=math.sqrt((float(row[1])-q[0])**2+(float(row[2])-q[1])**2)
-						spotList=putOrder(spotList, float(row[1]), float(row[2]), euclideanDist)
-			break
-
-	return spotList
-
-	
-def mindist(q, b, ordCells, cell):
-	
-	cellList=[]
-	
-	for x in range(10):
-		for y in range(10):
-			
-			if x==cell[0] and y==cell[1]:
-				pass
-			
-			if [x,y] in nearestCells(cell) and [x,y] not in allVisitedCells:
-
-				dividedRangeX=(float(b[1])-float(b[0]))/10
-				dividedRangeY=(float(b[3])-float(b[2]))/10
-				
-				lowerXCellBound=float(b[0])+(x*dividedRangeX)
-				upperXCellBound=float(b[0])+((x+1)*dividedRangeX)
-				lowerYCellBound=float(b[2])+(y*dividedRangeY)
-				upperYCellBound=float(b[2])+((y+1)*dividedRangeY)
-
-				if q[0]>=upperXCellBound and q[1]>=lowerYCellBound and q[1]<=upperYCellBound:
-
-					minCellDist=q[0]-upperXCellBound
-					
-				elif q[0]<=lowerXCellBound and q[1]>=lowerYCellBound and q[1]<=upperYCellBound:
-						
-					minCellDist=lowerXCellBound-q[0]
-					
-				elif q[0]>=lowerXCellBound and q[0]<=upperXCellBound and q[1]<=lowerYCellBound:
-						
-					minCellDist=lowerYCellBound-q[1]
-					
-				elif q[0]>=lowerXCellBound and q[0]<=upperXCellBound and q[1]>=upperYCellBound:
-						
-					minCellDist=q[1]-upperYCellBound
-					
-				elif q[0]>upperXCellBound and q[1]<lowerYCellBound:
-					
-					minCellDist=math.sqrt((q[0]-upperXCellBound)**2+(lowerYCellBound-q[1])**2)
-				
-				elif q[0]<lowerXCellBound and q[1]<lowerYCellBound:
-					
-					minCellDist=math.sqrt((lowerXCellBound-q[0])**2+(lowerYCellBound-q[1])**2)
-
-				elif q[0]>upperXCellBound and q[1]>upperYCellBound:
-
-					minCellDist=math.sqrt((q[0]-upperXCellBound)**2+(q[1]-upperYCellBound)**2)
-
-				elif q[0]<lowerXCellBound and q[1]>upperYCellBound:
-
-					minCellDist=math.sqrt((lowerXCellBound-q[0])**2+(q[1]-upperYCellBound)**2)
-
-				if [x, y, minCellDist] not in priorityQueue and [x, y, minCellDist] not in ordCells:
-					cellList=putOrder(cellList, x, y, minCellDist)
-	
-	return cellList
-
 
 
 def knnGenerator(q, k, b, cell):
@@ -467,6 +246,221 @@ def inserting(xcoord, ycoord, firstTime, countSpots, ordCells, ordSpots, firstSp
 			priorityQueue.insert(len(priorityQueue), c)	
 
 
+def mindist(q, b, ordCells, cell):
+	
+	cellList=[]
+	
+	for x in range(10):
+		for y in range(10):
+			
+			if x==cell[0] and y==cell[1]:
+				pass
+			
+			if [x,y] in nearestCells(cell) and [x,y] not in allVisitedCells:
+
+				dividedRangeX=(float(b[1])-float(b[0]))/10
+				dividedRangeY=(float(b[3])-float(b[2]))/10
+				
+				lowerXCellBound=float(b[0])+(x*dividedRangeX)
+				upperXCellBound=float(b[0])+((x+1)*dividedRangeX)
+				lowerYCellBound=float(b[2])+(y*dividedRangeY)
+				upperYCellBound=float(b[2])+((y+1)*dividedRangeY)
+
+				if q[0]>=upperXCellBound and q[1]>=lowerYCellBound and q[1]<=upperYCellBound:
+
+					minCellDist=q[0]-upperXCellBound
+					
+				elif q[0]<=lowerXCellBound and q[1]>=lowerYCellBound and q[1]<=upperYCellBound:
+						
+					minCellDist=lowerXCellBound-q[0]
+					
+				elif q[0]>=lowerXCellBound and q[0]<=upperXCellBound and q[1]<=lowerYCellBound:
+						
+					minCellDist=lowerYCellBound-q[1]
+					
+				elif q[0]>=lowerXCellBound and q[0]<=upperXCellBound and q[1]>=upperYCellBound:
+						
+					minCellDist=q[1]-upperYCellBound
+					
+				elif q[0]>upperXCellBound and q[1]<lowerYCellBound:
+					
+					minCellDist=math.sqrt((q[0]-upperXCellBound)**2+(lowerYCellBound-q[1])**2)
+				
+				elif q[0]<lowerXCellBound and q[1]<lowerYCellBound:
+					
+					minCellDist=math.sqrt((lowerXCellBound-q[0])**2+(lowerYCellBound-q[1])**2)
+
+				elif q[0]>upperXCellBound and q[1]>upperYCellBound:
+
+					minCellDist=math.sqrt((q[0]-upperXCellBound)**2+(q[1]-upperYCellBound)**2)
+
+				elif q[0]<lowerXCellBound and q[1]>upperYCellBound:
+
+					minCellDist=math.sqrt((lowerXCellBound-q[0])**2+(q[1]-upperYCellBound)**2)
+
+				if [x, y, minCellDist] not in priorityQueue and [x, y, minCellDist] not in ordCells:
+
+					cellList=putOrder(cellList, x, y, minCellDist)
+	
+	return cellList
+
+
+def nearestCells(c):
+	
+	x=c[0]
+	y=c[1]
+	
+	if [x,y] not in nCList:
+		nCList.insert(len(nCList), [x,y])
+	
+	if x==0 and y==0:
+		
+		if [x, y+1] not in nCList:
+			nCList.insert(len(nCList), [x, y+1]) 
+		if [x+1, y+1] not in nCList:
+			nCList.insert(len(nCList), [x+1, y+1])
+		if [x+1, y] not in nCList:
+			nCList.insert(len(nCList), [x+1, y])
+		
+	elif x==0 and y>=1 and y<=8:
+		
+		if [x, y+1] not in nCList:
+			nCList.insert(len(nCList), [x, y+1]) 
+		if [x+1, y+1] not in nCList:
+			nCList.insert(len(nCList), [x+1, y+1])
+		if [x+1, y] not in nCList:
+			nCList.insert(len(nCList), [x+1, y])
+		if [x+1, y-1] not in nCList:
+			nCList.insert(len(nCList), [x+1, y-1])
+		if [x, y-1] not in nCList:
+			nCList.insert(len(nCList), [x, y-1])
+	
+	elif x==0 and y==9:
+	
+		if [x+1, y] not in nCList:
+			nCList.insert(len(nCList), [x+1, y])
+		if [x+1, y-1] not in nCList:
+			nCList.insert(len(nCList), [x+1, y-1])
+		if [x, y-1] not in nCList:
+			nCList.insert(len(nCList), [x, y-1])
+		
+	elif x==9 and y==0:
+	
+		if [x-1, y] not in nCList:
+			nCList.insert(len(nCList), [x-1, y])
+		if [x-1, y+1] not in nCList:
+			nCList.insert(len(nCList), [x-1, y+1])
+		if [x, y+1] not in nCList:
+			nCList.insert(len(nCList), [x, y+1]) 
+
+	elif x>=1 and x<=8 and y==0:
+		
+		if [x-1, y] not in nCList:
+			nCList.insert(len(nCList), [x-1, y])
+		if [x-1, y+1] not in nCList:
+			nCList.insert(len(nCList), [x-1, y+1])
+		if [x, y+1] not in nCList:
+			nCList.insert(len(nCList), [x, y+1]) 
+		if [x+1, y+1] not in nCList:
+			nCList.insert(len(nCList), [x+1, y+1])
+		if [x+1, y] not in nCList:
+			nCList.insert(len(nCList), [x+1, y])
+		
+	elif x==9 and y==9:
+		
+		if [x-1, y] not in nCList:
+			nCList.insert(len(nCList), [x-1, y])
+		if [x-1, y-1] not in nCList:
+			nCList.insert(len(nCList), [x-1, y-1])
+		if [x, y-1] not in nCList:
+			nCList.insert(len(nCList), [x, y-1])
+
+	elif x>=1 and x<=8 and y==9:
+		
+		if [x-1, y] not in nCList:
+			nCList.insert(len(nCList), [x-1, y])
+		if [x-1, y-1] not in nCList:
+			nCList.insert(len(nCList), [x-1, y-1])
+		if [x, y-1] not in nCList:
+			nCList.insert(len(nCList), [x, y-1])
+		if [x+1, y-1] not in nCList:
+			nCList.insert(len(nCList), [x+1, y-1])
+		if [x+1, y] not in nCList:
+			nCList.insert(len(nCList), [x+1, y])
+		
+	elif x==9 and y>=1 and y<=8:
+		
+		if [x, y+1] not in nCList:
+			nCList.insert(len(nCList), [x, y+1])
+		if [x-1, y+1] not in nCList:
+			nCList.insert(len(nCList), [x-1, y+1])
+		if [x-1, y] not in nCList:
+			nCList.insert(len(nCList), [x-1, y])
+		if [x-1, y-1] not in nCList:
+			nCList.insert(len(nCList), [x-1, y-1])
+		if [x, y-1] not in nCList:
+			nCList.insert(len(nCList), [x, y-1])
+	
+	else:
+		
+		if [x-1, y+1] not in nCList:
+			nCList.insert(len(nCList), [x-1, y+1])
+		if [x, y+1] not in nCList:
+			nCList.insert(len(nCList), [x, y+1])
+		if [x+1, y+1] not in nCList:
+			nCList.insert(len(nCList), [x+1, y+1])
+		if [x-1, y] not in nCList:
+			nCList.insert(len(nCList), [x-1, y])
+		if [x+1, y] not in nCList:
+			nCList.insert(len(nCList), [x+1, y])	
+		if [x-1, y-1] not in nCList:
+			nCList.insert(len(nCList), [x-1, y-1])
+		if [x, y-1] not in nCList:
+			nCList.insert(len(nCList), [x, y-1])
+		if [x+1, y-1] not in nCList:
+			nCList.insert(len(nCList), [x+1, y-1])
+		
+	return nCList
+
+
+def putOrder(aList, x, y, distance):
+
+	if len(aList)==0:
+		aList.insert(len(aList), [x, y, distance])
+		return aList
+
+	place=0
+	for a in aList:
+		
+		if distance<=a[2]:
+			aList.insert(place, [x, y, distance])
+			return aList
+		else:
+			place+=1
+
+	if [x, y, distance] not in a:
+		aList.insert(len(aList), [x, y, distance])
+		return aList
+
+
+def orderedNSpots(q, cell):
+	
+	spotList=[]
+	for l in dirList:
+		numspots=0
+		if l[0]==cell[0] and l[1]==cell[1]:
+			
+			with open('grid.grd', 'r', encoding='UTF-8') as dfgrd: 
+				dfgrd.seek(l[2])
+				for row in dfgrd:	
+					numspots+=1
+					row=row.split(' ')
+					if numspots<=l[3]:
+						euclideanDist=math.sqrt((float(row[1])-q[0])**2+(float(row[2])-q[1])**2)
+						spotList=putOrder(spotList, float(row[1]), float(row[2]), euclideanDist)
+			break
+
+	return spotList
 
 
 
