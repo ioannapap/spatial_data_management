@@ -1,3 +1,4 @@
+#2790---Ioanna---Papagianni
 import math
 
 def dirData():
@@ -95,7 +96,6 @@ def knnGenerator(q, k, b, cell):
 					haveCell=0 #to be here means that i do have at least one spot
 				else:
 					break
-
 		
 		elif not firstSpotNeighborCells:
 
@@ -118,8 +118,6 @@ def knnGenerator(q, k, b, cell):
 
 					break
 					
-
-
 		elif haveCell==0 and lastSpot[2]>firstSpotNeighborCells[0][2] and k>=wheresLastSpot+1 and noCells==0: 			#if the last spot before cell in pq is more far than the first spot in next ncell:
 
 			inserting(firstSpotNeighborCells[0][0], firstSpotNeighborCells[0][1], firstTime, countSpots, ordCells, ordSpots, firstSpotNeighborCells, allVisitedCells)
@@ -244,65 +242,6 @@ def inserting(xcoord, ycoord, firstTime, countSpots, ordCells, ordSpots, firstSp
 	for c in newNCells:
 		if c not in priorityQueue:
 			priorityQueue.insert(len(priorityQueue), c)	
-
-
-def mindist(q, b, ordCells, cell):
-	
-	cellList=[]
-	
-	for x in range(10):
-		for y in range(10):
-			
-			if x==cell[0] and y==cell[1]:
-				pass
-			
-			if [x,y] in nearestCells(cell) and [x,y] not in allVisitedCells:
-
-				dividedRangeX=(float(b[1])-float(b[0]))/10
-				dividedRangeY=(float(b[3])-float(b[2]))/10
-				
-				lowerXCellBound=float(b[0])+(x*dividedRangeX)
-				upperXCellBound=float(b[0])+((x+1)*dividedRangeX)
-				lowerYCellBound=float(b[2])+(y*dividedRangeY)
-				upperYCellBound=float(b[2])+((y+1)*dividedRangeY)
-
-				if q[0]>=upperXCellBound and q[1]>=lowerYCellBound and q[1]<=upperYCellBound:
-
-					minCellDist=q[0]-upperXCellBound
-					
-				elif q[0]<=lowerXCellBound and q[1]>=lowerYCellBound and q[1]<=upperYCellBound:
-						
-					minCellDist=lowerXCellBound-q[0]
-					
-				elif q[0]>=lowerXCellBound and q[0]<=upperXCellBound and q[1]<=lowerYCellBound:
-						
-					minCellDist=lowerYCellBound-q[1]
-					
-				elif q[0]>=lowerXCellBound and q[0]<=upperXCellBound and q[1]>=upperYCellBound:
-						
-					minCellDist=q[1]-upperYCellBound
-					
-				elif q[0]>upperXCellBound and q[1]<lowerYCellBound:
-					
-					minCellDist=math.sqrt((q[0]-upperXCellBound)**2+(lowerYCellBound-q[1])**2)
-				
-				elif q[0]<lowerXCellBound and q[1]<lowerYCellBound:
-					
-					minCellDist=math.sqrt((lowerXCellBound-q[0])**2+(lowerYCellBound-q[1])**2)
-
-				elif q[0]>upperXCellBound and q[1]>upperYCellBound:
-
-					minCellDist=math.sqrt((q[0]-upperXCellBound)**2+(q[1]-upperYCellBound)**2)
-
-				elif q[0]<lowerXCellBound and q[1]>upperYCellBound:
-
-					minCellDist=math.sqrt((lowerXCellBound-q[0])**2+(q[1]-upperYCellBound)**2)
-
-				if [x, y, minCellDist] not in priorityQueue and [x, y, minCellDist] not in ordCells:
-
-					cellList=putOrder(cellList, x, y, minCellDist)
-	
-	return cellList
 
 
 def nearestCells(c):
@@ -462,6 +401,64 @@ def orderedNSpots(q, cell):
 
 	return spotList
 
+
+def mindist(q, b, ordCells, cell):
+	
+	cellList=[]
+	
+	for x in range(10):
+		for y in range(10):
+			
+			if x==cell[0] and y==cell[1]:
+				pass
+			
+			if [x,y] in nearestCells(cell) and [x,y] not in allVisitedCells:
+
+				dividedRangeX=(float(b[1])-float(b[0]))/10
+				dividedRangeY=(float(b[3])-float(b[2]))/10
+				
+				lowerXCellBound=float(b[0])+(x*dividedRangeX)
+				upperXCellBound=float(b[0])+((x+1)*dividedRangeX)
+				lowerYCellBound=float(b[2])+(y*dividedRangeY)
+				upperYCellBound=float(b[2])+((y+1)*dividedRangeY)
+
+				if q[0]>=upperXCellBound and q[1]>=lowerYCellBound and q[1]<=upperYCellBound:
+
+					minCellDist=q[0]-upperXCellBound
+					
+				elif q[0]<=lowerXCellBound and q[1]>=lowerYCellBound and q[1]<=upperYCellBound:
+						
+					minCellDist=lowerXCellBound-q[0]
+					
+				elif q[0]>=lowerXCellBound and q[0]<=upperXCellBound and q[1]<=lowerYCellBound:
+						
+					minCellDist=lowerYCellBound-q[1]
+					
+				elif q[0]>=lowerXCellBound and q[0]<=upperXCellBound and q[1]>=upperYCellBound:
+						
+					minCellDist=q[1]-upperYCellBound
+					
+				elif q[0]>upperXCellBound and q[1]<lowerYCellBound:
+					
+					minCellDist=math.sqrt((q[0]-upperXCellBound)**2+(lowerYCellBound-q[1])**2)
+				
+				elif q[0]<lowerXCellBound and q[1]<lowerYCellBound:
+					
+					minCellDist=math.sqrt((lowerXCellBound-q[0])**2+(lowerYCellBound-q[1])**2)
+
+				elif q[0]>upperXCellBound and q[1]>upperYCellBound:
+
+					minCellDist=math.sqrt((q[0]-upperXCellBound)**2+(q[1]-upperYCellBound)**2)
+
+				elif q[0]<lowerXCellBound and q[1]>upperYCellBound:
+
+					minCellDist=math.sqrt((lowerXCellBound-q[0])**2+(q[1]-upperYCellBound)**2)
+
+				if [x, y, minCellDist] not in priorityQueue and [x, y, minCellDist] not in ordCells:
+
+					cellList=putOrder(cellList, x, y, minCellDist)
+	
+	return cellList
 
 
 if __name__ == '__main__':

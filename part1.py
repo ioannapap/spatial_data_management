@@ -1,4 +1,4 @@
-#from operator import itemgetter 									
+#2790---Ioanna---Papagianni									
 def findLimits():
 	
 	with open('Beijing_restaurants.txt', 'r', encoding='UTF-8') as df1:
@@ -58,13 +58,6 @@ def theGrid(cList, boundaries):
 		
 		for x in range(10):
 			for y in range(10):
-
-				#print('cell (%d ,%d)' % (x,y))
-				#print('lowerx boundary: %f' % (boundaries[0]+(x*dividedRangeX)))
-				#print('maxx boundary: %f' % (boundaries[0]+((x+1)*dividedRangeX)))
-				#print('lowery boundary: %f' % (boundaries[2]+(y*dividedRangeY)))
-				#print('maxy boundary: %f' % (boundaries[2]+((y+1)*dividedRangeY)))
-
 				for sublist in cList:
 
 					if ((sublist[1]>=boundaries[0]+(x*dividedRangeX) and sublist[1]<boundaries[0]+((x+1)*dividedRangeX)) or (x==9 and sublist[1]==boundaries[1])) and ((sublist[2]>=boundaries[2]+(y*dividedRangeY) and sublist[2]<boundaries[2]+((y+1)*dividedRangeY)) or (y==9 and sublist[2]==boundaries[3])):
