@@ -1,4 +1,5 @@
 #2790---Ioanna---Papagianni
+
 import math
 
 def dirData():
@@ -21,7 +22,8 @@ def getkq(b):
 	
 	print('-----------------INCREMENTAL NEAREST NEIGHBOR SELECTION-----------------')
 	checked=0
-	while checked==0 or len(args)!=3:
+
+	while checked==0:
 		args=input('Give k (1-51969), x_coordinate (%s-%s) and y_coordinate (%s-%s): ' % (b[0], b[1], b[2], b[3]) ).split(' ')
 		try: 
 			checked=checkArgs(args,b)
@@ -73,6 +75,7 @@ def knnGenerator(q, k, b, cell):
 	firstTime=1
 	canYield=0
 	noCells=0
+	noFC=0
 
 	countSpots=0
 	wheresLastSpot=-1
@@ -80,6 +83,8 @@ def knnGenerator(q, k, b, cell):
 	priorityQueue.insert(len(priorityQueue), [cell[0], cell[1], 0])
 	
 	while True:
+
+		#*******************************************#
 
 		if haveCell==1:
 			
@@ -93,10 +98,12 @@ def knnGenerator(q, k, b, cell):
 				if element[0]>=10:
 					lastSpot=element
 					wheresLastSpot+=1
-					haveCell=0 #to be here means that i do have at least one spot
+					haveCell=0
 				else:
 					break
 		
+		#*******************************************#
+
 		elif not firstSpotNeighborCells:
 
 			noCells=1
@@ -104,21 +111,60 @@ def knnGenerator(q, k, b, cell):
 			for element in priorityQueue:
 				if element[0]>=0 and element[0]<=9:
 					firstCell=element
+					noFC=0
 					break
+				else:
+					noFC=1
 
-			if not firstCell: #there is no cell in pq
+			if noFC==1: 
 				for element in priorityQueue:
-					yield element #end of story
+					nearestNeighbor=element
+					priorityQueue.pop(0)
+					yield nearestNeighbor 
+					break					
+			
 			else:
-				for element in priorityQueue:
-					if element!=firstCell:
-						nearestNeighbor=element
-						priorityQueue.pop(0)
-						yield nearestNeighbor
+				leftCellSpots=orderedNSpots(q, [firstCell[0], firstCell[1]])
 
-					break
-					
-		elif haveCell==0 and lastSpot[2]>firstSpotNeighborCells[0][2] and k>=wheresLastSpot+1 and noCells==0: 			#if the last spot before cell in pq is more far than the first spot in next ncell:
+				if not leftCellSpots:
+					allVisitedCells.insert(len(allVisitedCells), [firstCell[0], firstCell[1]])
+					priorityQueue.remove(firstCell)			
+				
+				else:
+					firstSpotDist=leftCellSpots[0][2]
+					for element in priorityQueue:
+						eldist=element[2]			
+
+						if eldist<=firstSpotDist and element[0]>=10:
+							nearestNeighbor=element
+							priorityQueue.pop(0)
+							yield nearestNeighbor
+							break
+
+						else:
+							allVisitedCells.insert(len(allVisitedCells), [firstCell[0], firstCell[1]])
+							priorityQueue.remove(firstCell)
+
+							for spot in leftCellSpots:
+								place=0
+								spotdist=spot[2]
+								for element in priorityQueue:
+									eldist=element[2]
+									if spotdist<=eldist and spot not in priorityQueue:
+										priorityQueue.insert(place, spot)
+										
+										break
+									else:
+										place+=1
+
+							for spot in leftCellSpots:
+								if spot not in priorityQueue:
+									priorityQueue.insert(len(priorityQueue), spot)			
+
+							break
+		#*******************************************#	
+
+		elif haveCell==0 and lastSpot[2]>firstSpotNeighborCells[0][2] and k>=wheresLastSpot+1 and noCells==0: 			
 
 			inserting(firstSpotNeighborCells[0][0], firstSpotNeighborCells[0][1], firstTime, countSpots, ordCells, ordSpots, firstSpotNeighborCells, allVisitedCells)
 
@@ -132,6 +178,7 @@ def knnGenerator(q, k, b, cell):
 						haveCell=1
 					break	
 				
+		#*******************************************#
 
 		elif haveCell==0 and ((lastSpot[2]<=firstSpotNeighborCells[0][2] and k>=wheresLastSpot+1) or (lastSpot[2]>firstSpotNeighborCells[0][2] and k<wheresLastSpot+1)) and noCells==0:
 	
@@ -141,13 +188,12 @@ def knnGenerator(q, k, b, cell):
 				checked=0
 				if element[0]>=10 and checked==0:
 					for ncell in firstSpotNeighborCells:
-						if lastSpot[2]<=ncell[2]: #maybe is <= from the firstSpotNeighborCell but not for all (maybe another one is closer for spots)
+						if lastSpot[2]<=ncell[2]: 
 							canYield=1
-						else: 									#means that we found the first element in the pq before lastSpot that is > than the firstSpotNeighborCells distance so...
+						else: 								
 				 			canYield=0
 				 			checked=1
 				 			inserting(ncell[0], ncell[1], firstTime, countSpots, ordCells, ordSpots, firstSpotNeighborCells, allVisitedCells)
-		 					#let's find the next lastSpot before cell in pq
 		 					wheresLastSpot=-1
 		 					for element in priorityQueue:			
 		 						if element[0]>=10:
@@ -167,11 +213,11 @@ def knnGenerator(q, k, b, cell):
 				else:
 					if element[0]>=0 and element[0]<=9:
 						haveCell=1
-				break	
-		
-		#here we dont care about cells or about firstSpotNeighborCells
+				break
+
+		#*******************************************#
+
 		elif lastSpot[2]<=firstSpotNeighborCells[0][2] and k<wheresLastSpot+1 and noCells==0:
-		#yield all
 			for element in priorityQueue:
 				if element[0]>=10:
 					nearestNeighbor=element
@@ -191,12 +237,12 @@ def inserting(xcoord, ycoord, firstTime, countSpots, ordCells, ordSpots, firstSp
 	
 	for i in newNCells:
 		if i not in ordCells:	
-			#****************************************	
+			
 			newiSpots=orderedNSpots(q, [i[0], i[1]])
 			if newiSpots:
 				firstSpotDist=newiSpots[0][2]
 				firstSpotNeighborCells=putOrder(firstSpotNeighborCells, i[0], i[1], firstSpotDist)
-			#*******************************************
+		
 			ordCells.insert(len(ordCells), i)
 
 	
@@ -208,7 +254,7 @@ def inserting(xcoord, ycoord, firstTime, countSpots, ordCells, ordSpots, firstSp
 
 	priorityQueue.remove([xcoord, ycoord, xdl])
 
-	#about to insert new spots to the pq (if i dont have it's fine- just skips it)
+
 	for spot in ordSpots:
 		place=0
 		spotdist=spot[2]
@@ -216,7 +262,6 @@ def inserting(xcoord, ycoord, firstTime, countSpots, ordCells, ordSpots, firstSp
 			eldist=element[2]
 			if spotdist<=eldist and spot not in priorityQueue:
 				priorityQueue.insert(place, spot)	
-				#print('pq:	', priorityQueue[:20])
 				countSpots+=1
 				break			
 			else:
@@ -226,10 +271,7 @@ def inserting(xcoord, ycoord, firstTime, countSpots, ordCells, ordSpots, firstSp
 			priorityQueue.insert(len(priorityQueue), spot)
 			countSpots+=1	
 	
-
-
-	#about to insert new cells to the pq (if i dont have it's fine- just skips it)
-	for c in newNCells: #quicker this way no ordCells:
+	for c in newNCells:
 		place=0
 		celldist=c[2]
 		for element in priorityQueue:
@@ -474,16 +516,13 @@ if __name__ == '__main__':
 	k=int(arguments[0])
 	q=[float(arguments[1]), float(arguments[2])]
 	cell=findqCell(q, bounds)
-	print('q cell:', cell)
 	
 	with open('results_part3.txt', 'w', encoding='UTF-8') as rp3: 	
 		counter=0	
-
 		for nn in knnGenerator(q, k, bounds, cell):
 			
 			if counter<k:
-				rp3.write('%s %s %s\n' % ('{0:.6f}'.format(nn[0]), '{0:.6f}'.format(nn[1]), '{}'.format(nn[2])))
-				print('nn: ', nn)
+				rp3.write('%s %s %s\n' % ('{0:.6f}'.format(nn[0]), '{0:.6f}'.format(nn[1])))
 				counter+=1
 			else:
 				for i in allVisitedCells:

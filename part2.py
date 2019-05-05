@@ -1,4 +1,5 @@
 #2790---Ioanna---Papagianni
+
 def checkDimensions(d, b): 								
 	
 	minX=float(b[0])
