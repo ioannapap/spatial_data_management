@@ -522,7 +522,7 @@ if __name__ == '__main__':
 		for nn in knnGenerator(q, k, bounds, cell):
 			
 			if counter<k:
-				rp3.write('%s %s %s\n' % ('{0:.6f}'.format(nn[0]), '{0:.6f}'.format(nn[1])))
+				rp3.write('%s %s\n' % ('{0:.6f}'.format(nn[0]), '{0:.6f}'.format(nn[1])))
 				counter+=1
 			else:
 				for i in allVisitedCells:
